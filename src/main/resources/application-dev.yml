@@ -1,5 +1,15 @@
 spring:
-  application:
-    name: in-nakhchivan-backend
-  profiles:
-    active: local
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/nakhchivandb
+    username: pass
+    password: 1212
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false #DB-ile is bitdikde session baglanir
+    properties:
+      hibernate:
+        show_sql: true
+        dialect:  org.hibernate.dialect.PostgreSQLDialect

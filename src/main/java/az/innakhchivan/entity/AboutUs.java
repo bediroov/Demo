@@ -18,7 +18,7 @@ public class AboutUs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String text;
+    private String description;
 
 //    private String fileName;
 //    private String type;
