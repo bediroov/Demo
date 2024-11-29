@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/nakhchivandb
+    url: jdbc:postgresql://localhost:5432/nakhdb
     username: pass
     password: 1212
 
@@ -13,3 +13,6 @@ spring:
       hibernate:
         show_sql: true
         dialect:  org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8088

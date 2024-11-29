@@ -3,7 +3,6 @@ package az.innakhchivan.controller;
 import az.innakhchivan.dto.request.AboutRequestDto;
 import az.innakhchivan.dto.response.AboutResponseDto;
 import az.innakhchivan.service.AboutUsService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +33,9 @@ public class AboutUsController {
         return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{Id}")
+    @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleted(@PathVariable Long Id) {
         aboutUsService.deletedAbout(Id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
 }
