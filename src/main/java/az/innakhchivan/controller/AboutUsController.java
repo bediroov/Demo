@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/about")
 @RequiredArgsConstructor
@@ -33,9 +35,16 @@ public class AboutUsController {
         return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<AboutResponseDto>> getAll() {
+        List<AboutResponseDto> aboutResponseDto = aboutUsService.getAboutAll();
+        return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deleted(@PathVariable Long Id) {
         aboutUsService.deletedAbout(Id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }
