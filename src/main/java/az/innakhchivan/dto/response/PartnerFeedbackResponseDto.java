@@ -1,4 +1,4 @@
-package az.innakhchivan.dto.request;
+package az.innakhchivan.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsRequestDto {
-    private String title;
-    private String description;
-    private String author;
+public class PartnerFeedbackResponseDto {
+    private Long id;
+    private String partnerFullName;
+    private String comment;
 }

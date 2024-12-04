@@ -12,16 +12,15 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class News extends BaseEntity {
+public class Sector {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
+    private String category;
     private String description;
-    private String author;
 
     @ManyToOne
-    @JoinColumn(name = "new_translation_id")
-    private NewTranslation newTranslation;
+    private PhotoGallery photoGallery;
+
 }

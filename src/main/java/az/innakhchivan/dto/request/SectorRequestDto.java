@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsRequestDto {
-    private String title;
+public class SectorRequestDto {
+    private String category;
     private String description;
-    private String author;
 }

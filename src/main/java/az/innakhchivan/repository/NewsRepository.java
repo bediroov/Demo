@@ -1,4 +1,7 @@
 package az.innakhchivan.repository;
 
-public interface NewsRepository {
+import az.innakhchivan.entity.News;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NewsRepository extends JpaRepository<News, Long> {
 }

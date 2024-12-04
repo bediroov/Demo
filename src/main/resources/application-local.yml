@@ -11,8 +11,22 @@ spring:
     open-in-view: false #DB-ile is bitdikde session baglanir
     properties:
       hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation=true
         show_sql: true
         dialect:  org.hibernate.dialect.PostgreSQLDialect
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 20MB
+
+
+logging:
+  level:
+    org.springframework: info
+    org.hibernate: info
 
 server:
   port: 8088

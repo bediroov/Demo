@@ -1,27 +1,32 @@
 package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "video_gallery")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class News extends BaseEntity {
+public class VideoGallery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String title;
-    private String description;
-    private String author;
 
-    @ManyToOne
-    @JoinColumn(name = "new_translation_id")
-    private NewTranslation newTranslation;
+    @NotNull
+    @URL
+    private String url;
+
+    private LocalDateTime uploadedAt = LocalDateTime.now();
 }

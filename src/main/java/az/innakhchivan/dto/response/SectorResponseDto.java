@@ -2,18 +2,14 @@ package az.innakhchivan.dto.response;
 
 import lombok.*;
 
-import java.util.Date;
-
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewsResponseDto {
+public class SectorResponseDto {
     private Long id;
-    private String title;
+    private String category;
     private String description;
-    private String author;
-    private Date created;
 
 }

@@ -1,5 +1,6 @@
 package az.innakhchivan.dto.request;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsRequestDto {
-    private String title;
-    private String description;
-    private String author;
+public class PartnerFeedbackRequestDto {
+    private String partnerFullName;
+    private String comment;
 }

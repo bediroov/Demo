@@ -7,21 +7,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "project")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class News extends BaseEntity {
+public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
+    private String category;
+    private String projectName;
     private String description;
-    private String author;
 
-    @ManyToOne
-    @JoinColumn(name = "new_translation_id")
-    private NewTranslation newTranslation;
+    //TODO
+    //picture
 }

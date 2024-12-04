@@ -6,22 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
-@Table
+@Table(name = "news_translation")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class News extends BaseEntity {
+public class NewTranslation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-    private String description;
-    private String author;
+    private String languageCode; // (az, en, ru)
 
-    @ManyToOne
-    @JoinColumn(name = "new_translation_id")
-    private NewTranslation newTranslation;
+    @OneToMany(mappedBy = "newTranslation", cascade = CascadeType.ALL)
+    private List<News> news;
 }
