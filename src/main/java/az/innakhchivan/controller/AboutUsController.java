@@ -18,26 +18,29 @@ public class AboutUsController {
     private final AboutUsService aboutUsService;
 
     @PostMapping
-    public ResponseEntity<AboutResponseDto> createAbout(@RequestBody AboutRequestDto aboutRequestDto) {
-        AboutResponseDto created = aboutUsService.createAbout(aboutRequestDto);
+    public ResponseEntity<AboutResponseDto> createAbout(@RequestBody AboutRequestDto aboutRequestDto,
+                                                        @RequestParam(required = false, defaultValue = "az") String lang) {
+        AboutResponseDto created = aboutUsService.createAbout(aboutRequestDto, lang);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{Id}")
-    public ResponseEntity<AboutResponseDto> updateAbout(@PathVariable Long Id, @RequestBody AboutRequestDto aboutRequestDto) {
-        AboutResponseDto responseDto = aboutUsService.updateAbout(Id, aboutRequestDto);
+    @PostMapping("/{Id}")
+    public ResponseEntity<AboutResponseDto> updateAbout(@PathVariable Long Id,
+                                                        @RequestBody AboutRequestDto aboutRequestDto,
+                                                        @RequestParam(required = false, defaultValue = "az") String lang) {
+        AboutResponseDto responseDto = aboutUsService.updateAbout(Id, aboutRequestDto, lang);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/{Id}")
-    public ResponseEntity<AboutResponseDto> getAboutById(@PathVariable Long Id) {
-        AboutResponseDto aboutResponseDto = aboutUsService.getAboutById(Id);
+    public ResponseEntity<AboutResponseDto> getAboutById(@PathVariable Long Id,  @RequestParam(required = false, defaultValue = "az") String lang) {
+        AboutResponseDto aboutResponseDto = aboutUsService.getAboutById(Id, lang);
         return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<AboutResponseDto>> getAll() {
-        List<AboutResponseDto> aboutResponseDto = aboutUsService.getAboutAll();
+    public ResponseEntity<List<AboutResponseDto>> getAll(@RequestParam(required = false, defaultValue = "az") String lang) {
+        List<AboutResponseDto> aboutResponseDto = aboutUsService.getAboutAll(lang);
         return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -15,8 +16,38 @@ public class WhyNakhinvest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String description;
 
-    //picture
+    @NotNull
+    private String azTitle;
+    @NotNull
+    private String azDescription;
+
+    private String enTitle;
+    private String enDescription;
+
+    private String ruTitle;
+    private String ruDescription;
+
+
+//    private String fileName;
+//    private String type;
+//
+//    @Lob
+//    private byte[] data;
+
+    public String getWhyNakhinvestTitle(String lang) {
+        return switch (lang) {
+            case "en" -> enTitle;
+            case "ru" -> ruTitle;
+            default -> azTitle;
+        };
+    }
+
+    public String getWhyNakhinvestDescription(String lang) {
+        return switch (lang) {
+            case "en" -> enDescription;
+            case "ru" -> ruDescription;
+            default -> azDescription;
+        };
+    }
 }

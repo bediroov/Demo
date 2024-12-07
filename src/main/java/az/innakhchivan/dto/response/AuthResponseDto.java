@@ -2,13 +2,11 @@ package az.innakhchivan.dto.response;
 
 import lombok.*;
 
-@Getter
 @Setter
+@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class QuestionResponseDto {
+public class AuthResponseDto {
     private Long id;
-    private String title;
-    private String description;
 }

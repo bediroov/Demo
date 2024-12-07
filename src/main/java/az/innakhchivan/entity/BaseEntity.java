@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,11 +15,11 @@ import java.util.Date;
 public class BaseEntity {
     @Column(name = "created_at")
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(name = "update_at")
     @UpdateTimestamp
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
     @Column(name = "status")
     private Boolean status;

@@ -1,5 +1,6 @@
 package az.innakhchivan.dto.request;
 
+import az.innakhchivan.entity.PhotoGallery;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

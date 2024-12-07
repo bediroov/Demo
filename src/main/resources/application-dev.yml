@@ -1,15 +1,39 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/nakhchivandb
-    username: pass
-    password: 1212
+    url: jdbc:postgresql://62.84.181.155:5432/nakhdb
+    username: nakhinvest
+    password: nakhinvest24
 
   jpa:
     hibernate:
       ddl-auto: update
+
     open-in-view: false #DB-ile is bitdikde session baglanir
     properties:
       hibernate:
-        show_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation=true
+        show_sql: false
         dialect:  org.hibernate.dialect.PostgreSQLDialect
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 20MB
+
+
+logging:
+  level:
+    org.springframework: info
+    org.hibernate: info
+
+server:
+  port: 8081
+
+jwt:
+  key: cn5N5rbQ1ruPW7ZEbjV6XMToIHyhG9KgHbvZedQahvjqqU3Kv9tv8X6gK289IXVXHUSVhKbjCgyny0SVOBOSg==
+  access-token-expiration: 300000
+  refresh-token-expiration: 18000000

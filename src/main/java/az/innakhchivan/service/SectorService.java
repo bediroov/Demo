@@ -17,55 +17,80 @@ import java.util.stream.Collectors;
 public class SectorService {
     private final SectorRepository sectorRepository;
 
-    public SectorResponseDto addSector(SectorRequestDto sectorRequestDto) {
-        Sector sector = new Sector();
+    Sector sector = new Sector();
 
-        sector.setCategory(sectorRequestDto.getCategory());
-        sector.setDescription(sectorRequestDto.getDescription());
+    public SectorResponseDto addSector(SectorRequestDto sectorRequestDto, String lang) {
+
+        switch (lang) {
+            case "en":
+                sector.setEnCategory(sectorRequestDto.getCategory());
+                sector.setEnDescription(sectorRequestDto.getDescription());
+                break;
+            case "ru":
+                sector.setRuCategory(sectorRequestDto.getCategory());
+                sector.setRuDescription(sectorRequestDto.getDescription());
+                break;
+            default:
+                sector.setAzCategory(sectorRequestDto.getCategory());
+                sector.setAzDescription(sectorRequestDto.getDescription());
+                break;
+        }
         sectorRepository.save(sector);
 
         return SectorResponseDto.builder()
                 .id(sector.getId())
-                .category(sector.getCategory())
-                .description(sector.getDescription())
+                .category(sector.getSectorCategory(lang))
+                .description(sector.getSectorDescription(lang))
                 .build();
     }
 
-    public SectorResponseDto updateSector(Long Id, SectorRequestDto sectorRequestDto) {
-        Sector sector = sectorRepository.findById(Id).orElseThrow(
+    public SectorResponseDto updateSector(Long Id, SectorRequestDto sectorRequestDto, String lang) {
+        sector = sectorRepository.findById(Id).orElseThrow(
                 () -> new SectorNotFoundException("Sector not found with id: " + Id)
         );
 
-        sector.setCategory(sectorRequestDto.getCategory());
-        sector.setDescription(sectorRequestDto.getDescription());
+        switch (lang) {
+            case "en":
+                sector.setEnCategory(sectorRequestDto.getCategory());
+                sector.setEnDescription(sectorRequestDto.getDescription());
+                break;
+            case "ru":
+                sector.setRuCategory(sectorRequestDto.getCategory());
+                sector.setRuDescription(sectorRequestDto.getDescription());
+                break;
+            default:
+                sector.setAzCategory(sectorRequestDto.getCategory());
+                sector.setAzDescription(sectorRequestDto.getDescription());
+                break;
+        }
         sectorRepository.save(sector);
 
         return SectorResponseDto.builder()
                 .id(sector.getId())
-                .category(sector.getCategory())
-                .description(sector.getDescription())
+                .category(sector.getSectorCategory(lang))
+                .description(sector.getSectorDescription(lang))
                 .build();
     }
 
-    public SectorResponseDto getSectorById(Long Id) {
-        Sector sector = sectorRepository.findById(Id).orElseThrow(
+    public SectorResponseDto getSectorById(Long Id, String lang) {
+        sector = sectorRepository.findById(Id).orElseThrow(
                 () -> new SectorNotFoundException("Sector not found with id: " + Id)
         );
 
         return SectorResponseDto.builder()
                 .id(sector.getId())
-                .category(sector.getCategory())
-                .description(sector.getDescription())
+                .category(sector.getSectorCategory(lang))
+                .description(sector.getSectorDescription(lang))
                 .build();
 
     }
 
-    public List<SectorResponseDto> getAllNews() {
+    public List<SectorResponseDto> getAllNews(String lang) {
         return sectorRepository.findAll().stream()
                 .map(x -> new SectorResponseDto(
                         x.getId(),
-                        x.getCategory(),
-                        x.getDescription()
+                        x.getSectorCategory(lang),
+                        x.getSectorDescription(lang)
                 ))
                 .collect(Collectors.toList());
 

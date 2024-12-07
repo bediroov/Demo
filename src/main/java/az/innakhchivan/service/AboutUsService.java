@@ -16,57 +16,94 @@ import java.util.stream.Collectors;
 public class AboutUsService {
     private final AboutUsRepository aboutUsRepository;
 
-    public AboutResponseDto createAbout(AboutRequestDto aboutRequestDto) {
-        AboutUs aboutUs = new AboutUs();
-        aboutUs.setTitle(aboutRequestDto.getTitle());
-        aboutUs.setDescription(aboutRequestDto.getDescription());
-        aboutUsRepository.save(aboutUs);
+    AboutUs about = new AboutUs();
 
-        return new AboutResponseDto(
-                aboutUs.getId(),
-                aboutUs.getTitle(),
-                aboutUs.getDescription()
-        );
-    }
+    public AboutResponseDto createAbout(AboutRequestDto aboutRequestDto, String lang) {
 
-    public AboutResponseDto updateAbout(Long id, AboutRequestDto aboutRequestDto) {
-        AboutUs aboutUs = aboutUsRepository.findById(id).orElseThrow(
-                () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
-        aboutUs.setTitle(aboutRequestDto.getTitle());
-        aboutUs.setDescription(aboutRequestDto.getDescription());
+        switch (lang) {
+            case "az":
+                about.setAzTitle(aboutRequestDto.getTitle());
+                about.setAzDescription(aboutRequestDto.getDescription());
+                break;
+            case "en":
+                about.setEnTitle(aboutRequestDto.getTitle());
+                about.setEnDescription(aboutRequestDto.getDescription());
+                break;
+            case "ru":
+                about.setRuTitle(aboutRequestDto.getTitle());
+                about.setRuDescription(aboutRequestDto.getDescription());
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported language " + lang);
 
-        AboutUs about = aboutUsRepository.save(aboutUs);
+        }
+
+        aboutUsRepository.save(about);
 
         return new AboutResponseDto(
                 about.getId(),
-                about.getTitle(),
-                about.getDescription());
-    }
-
-    public AboutResponseDto getAboutById(Long id) {
-        AboutUs aboutUs = aboutUsRepository.findById(id).orElseThrow(
-                () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
-        return new AboutResponseDto(
-                aboutUs.getId(),
-                aboutUs.getTitle(),
-                aboutUs.getDescription()
+                about.getAboutUsTitle(lang),
+                about.getAboutUsDescription(lang)
         );
     }
 
-    public List<AboutResponseDto> getAboutAll() {
+    public AboutResponseDto updateAbout(Long id, AboutRequestDto aboutRequestDto, String lang) {
+        about = aboutUsRepository.findById(id).orElseThrow(
+                () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
+
+        switch (lang) {
+            case "az":
+                about.setAzTitle(aboutRequestDto.getTitle());
+                about.setAzDescription(aboutRequestDto.getDescription());
+                break;
+            case "en":
+                about.setEnTitle(aboutRequestDto.getTitle());
+                about.setEnDescription(aboutRequestDto.getDescription());
+                break;
+            case "ru":
+                about.setRuTitle(aboutRequestDto.getTitle());
+                about.setRuDescription(aboutRequestDto.getDescription());
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported language " + lang);
+
+        }
+
+        aboutUsRepository.save(about);
+
+        return new AboutResponseDto(
+                about.getId(),
+                about.getAboutUsTitle(lang),
+                about.getAboutUsDescription(lang)
+        );
+    }
+
+    public AboutResponseDto getAboutById(Long id, String lang) {
+        about = aboutUsRepository.findById(id).orElseThrow(
+                () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
+
+
+        return new AboutResponseDto(
+                about.getId(),
+                about.getAboutUsTitle(lang),
+                about.getAboutUsDescription(lang)
+        );
+    }
+
+    public List<AboutResponseDto> getAboutAll(String lang) {
         return aboutUsRepository.findAll().stream()
                 .map(aboutUs -> new AboutResponseDto(
                         aboutUs.getId(),
-                        aboutUs.getTitle(),
-                        aboutUs.getDescription()
+                        aboutUs.getAboutUsTitle(lang),
+                        aboutUs.getAboutUsDescription(lang)
                 ))
                 .collect(Collectors.toList());
     }
 
     public void deletedAbout(Long id) {
-        AboutUs aboutUs = aboutUsRepository.findById(id).orElseThrow(
+        about = aboutUsRepository.findById(id).orElseThrow(
                 () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
 
-        aboutUsRepository.delete(aboutUs);
+        aboutUsRepository.delete(about);
     }
 }

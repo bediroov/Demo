@@ -2,7 +2,6 @@ package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
 
@@ -24,7 +23,4 @@ public class PhotoGallery implements Serializable {
     @Lob
     @Column(name = "image_data")
     private byte[] imageData;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private News news;
 }

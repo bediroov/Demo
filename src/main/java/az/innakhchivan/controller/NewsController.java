@@ -6,9 +6,12 @@ import az.innakhchivan.service.NewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,32 +22,45 @@ public class NewsController {
     private final NewsService newsService;
 
     @PostMapping
-    public ResponseEntity<NewsResponseDto> addNews(@Valid @RequestBody NewsRequestDto newsRequestDto) {
-        NewsResponseDto responseDto = newsService.addNews(newsRequestDto);
+    public ResponseEntity<NewsResponseDto> addedNews(@Valid @RequestBody NewsRequestDto newsRequestDto,
+                                                     @RequestParam(required = false, defaultValue = "az") String lang) throws IOException {
+
+        NewsResponseDto responseDto = newsService.addNews(newsRequestDto, lang);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NewsResponseDto> getNewsById(@PathVariable Long id) {
-        NewsResponseDto responseDto = newsService.getNewsById(id);
-        return ResponseEntity.ok(responseDto);
+    public ResponseEntity<NewsResponseDto> getNewsById(@PathVariable Long id,
+                                                       @RequestParam(defaultValue = "az") String lang) {
+        NewsResponseDto responseDto = newsService.getNewsById(id, lang);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<NewsResponseDto>> getAllNews() {
-        List<NewsResponseDto> newsList = newsService.getAllNews();
-        return ResponseEntity.ok(newsList);
+
+    @GetMapping("/all")
+    public ResponseEntity<List<NewsResponseDto>> getAllNews( @RequestParam(defaultValue = "az") String lang) {
+
+        List<NewsResponseDto> newsList = newsService.getAllNews(lang);
+        return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NewsResponseDto> updateNews(@PathVariable Long id, @Valid @RequestBody NewsRequestDto newsRequestDto) {
-        NewsResponseDto responseDto = newsService.updateNews(id, newsRequestDto);
-        return ResponseEntity.ok(responseDto);
+    public ResponseEntity<NewsResponseDto> updatedNews(@PathVariable Long id, @Valid @RequestBody NewsRequestDto newsRequestDto,
+                                                       @RequestParam(defaultValue = "az") String lang ) {
+        NewsResponseDto responseDto = newsService.updateNews(id, newsRequestDto, lang);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNews(@PathVariable Long id) {
+    public ResponseEntity<Void> deletedNews(@PathVariable Long id) {
         newsService.deleteNews(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/lang/{id}")
+    public ResponseEntity<Void> deletedNewsForLanguage(@PathVariable Long id, @RequestParam String lang) {
+        newsService.deleteNewsForLang(id, lang);
+        return ResponseEntity.noContent().build();
+    }
 }
+

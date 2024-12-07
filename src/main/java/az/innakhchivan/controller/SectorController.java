@@ -19,26 +19,30 @@ public class SectorController {
     private final SectorService sectorService;
 
     @PostMapping
-    public ResponseEntity<SectorResponseDto> addSector(@Valid @RequestBody SectorRequestDto sectorRequestDto) {
-        SectorResponseDto responseDto = sectorService.addSector(sectorRequestDto);
+    public ResponseEntity<SectorResponseDto> addSector(@Valid @RequestBody SectorRequestDto sectorRequestDto,
+                                                       @RequestParam(required = false, defaultValue = "az") String lang) {
+        SectorResponseDto responseDto = sectorService.addSector(sectorRequestDto, lang);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SectorResponseDto> getSectorById(@PathVariable Long id) {
-        SectorResponseDto responseDto = sectorService.getSectorById(id);
+    public ResponseEntity<SectorResponseDto> getSectorById(@PathVariable Long id,
+                                                           @RequestParam(required = false, defaultValue = "az") String lang) {
+        SectorResponseDto responseDto = sectorService.getSectorById(id, lang);
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<SectorResponseDto>> getAllSectors() {
-        List<SectorResponseDto> newsList = sectorService.getAllNews();
+    public ResponseEntity<List<SectorResponseDto>> getAllSectors(@RequestParam(required = false, defaultValue = "az") String lang) {
+        List<SectorResponseDto> newsList = sectorService.getAllNews(lang);
         return ResponseEntity.ok(newsList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SectorResponseDto> updateSector(@PathVariable Long id, @Valid @RequestBody SectorRequestDto sectorRequestDto) {
-        SectorResponseDto responseDto = sectorService.updateSector(id, sectorRequestDto);
+    public ResponseEntity<SectorResponseDto> updateSector(@PathVariable Long id,
+                                                          @Valid @RequestBody SectorRequestDto sectorRequestDto,
+                                                          @RequestParam(required = false, defaultValue = "az") String lang) {
+        SectorResponseDto responseDto = sectorService.updateSector(id, sectorRequestDto, lang);
         return ResponseEntity.ok(responseDto);
     }
 

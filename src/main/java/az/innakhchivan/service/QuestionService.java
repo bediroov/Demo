@@ -16,55 +16,89 @@ import java.util.stream.Collectors;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public QuestionResponseDto createQuestion(QuestionRequestDto questionRequestDto) {
-        Question question = new Question();
-        question.setTitle(questionRequestDto.getTitle());
-        question.setDescription(questionRequestDto.getDescription());
+    Question question = new Question();
+
+    public QuestionResponseDto createQuestion(QuestionRequestDto questionRequestDto, String lang) {
+
+        switch (lang) {
+            case "az":
+                question.setAzTitle(questionRequestDto.getTitle());
+                question.setAzDescription(questionRequestDto.getDescription());
+                break;
+            case "en":
+                question.setEnTitle(questionRequestDto.getTitle());
+                question.setEnDescription(questionRequestDto.getDescription());
+                break;
+            case "ru":
+                question.setRuTitle(questionRequestDto.getTitle());
+                question.setRuDescription(questionRequestDto.getDescription());
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported language " + lang);
+        }
+
         questionRepository.save(question);
 
-        return new QuestionResponseDto(
-                question.getId(),
-                question.getTitle(),
-                question.getDescription()
-                );
+        return QuestionResponseDto.builder()
+                .id(question.getId())
+                .title(question.getQuestionTitle(lang))
+                .description(question.getQuestionDescription(lang))
+                .build();
     }
 
-    public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto questionRequestDto) {
-        Question question = questionRepository.findById(id).orElseThrow(
+    public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto questionRequestDto, String lang) {
+        question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException("Question not found Id : " + id));
-        question.setTitle(questionRequestDto.getTitle());
-        question.setDescription(questionRequestDto.getDescription());
 
-        Question question1 = questionRepository.save(question);
 
-        return new QuestionResponseDto(
-                question1.getId(),
-                question1.getTitle(),
-                question1.getDescription());
+        switch (lang) {
+            case "en":
+                question.setEnTitle(questionRequestDto.getTitle());
+                question.setEnDescription(questionRequestDto.getDescription());
+                break;
+            case "ru":
+                question.setRuTitle(questionRequestDto.getTitle());
+                question.setRuDescription(questionRequestDto.getDescription());
+                break;
+            default:
+                question.setAzTitle(questionRequestDto.getTitle());
+                question.setAzDescription(questionRequestDto.getDescription());
+                break;
+        }
+
+        questionRepository.save(question);
+
+        return QuestionResponseDto.builder()
+                .id(question.getId())
+                .title(question.getQuestionTitle(lang))
+                .description(question.getQuestionDescription(lang))
+                .build();
     }
 
-    public QuestionResponseDto getQuestionById(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(
+    public QuestionResponseDto getQuestionById(Long id, String lang) {
+        question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException("Question not found Id : " + id));
-        return new QuestionResponseDto(
-                question.getId(),
-                question.getTitle(),
-                question.getDescription()
-        );
+
+
+        return QuestionResponseDto.builder()
+                .id(question.getId())
+                .title(question.getQuestionTitle(lang))
+                .description(question.getQuestionDescription(lang))
+                .build();
     }
 
-    public List<QuestionResponseDto> getQuestionAll() {
+    public List<QuestionResponseDto> getQuestionAll(String lang) {
         return questionRepository.findAll().stream()
                 .map(question -> new QuestionResponseDto(
                         question.getId(),
-                        question.getTitle(),
-                        question.getDescription()
+                        question.getQuestionTitle(lang),
+                        question.getQuestionDescription(lang)
                 ))
                 .collect(Collectors.toList());
     }
 
     public void deletedQuestion(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(
+        question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException("Question not found Id : " + id));
 
         questionRepository.delete(question);
