@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface VideoGalleryRepository extends JpaRepository<VideoGallery, Long> {
     Optional<VideoGallery> findVideoGalleryById(Long id);
-
 }

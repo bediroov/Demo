@@ -1,14 +1,15 @@
 package az.innakhchivan.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class WhyNakhinvestResponseDto {
     private Long id;
     private String title;
     private String description;
+    private String imageUrl;
 }

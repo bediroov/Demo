@@ -1,6 +1,5 @@
 package az.innakhchivan.dto.request;
 
-import az.innakhchivan.entity.PhotoGallery;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewsRequestDto {
-    private String title;
-    private String description;
-    private String author;
+    private String azTitle;
+    private String azDescription;
+
+    private String enTitle;
+    private String enDescription;
+
+    private String ruTitle;
+    private String ruDescription;
+
+    private String imageUrl;
+    private String optional;
 }

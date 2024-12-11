@@ -1,3 +1,4 @@
+
 package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
@@ -18,29 +19,26 @@ public class Project extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private String azCategory;
-    @NotNull
-    private String azProjectName;
-    @NotNull
+
+    private String azTitle;
     private String azDescription;
 
-    private String enCategory;
-    private String enProjectName;
+    private String enTitle;
     private String enDescription;
 
-    private String ruCategory;
-    private String ruProjectName;
+    private String ruTitle;
     private String ruDescription;
+    private String imageUrl;
 
-    //TODO
-    //picture
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
-    public String getProjectCategory(String lang) {
+    public String getProjectTitle(String lang) {
         return switch (lang) {
-            case "en" -> enCategory;
-            case "ru" -> ruCategory;
-            default -> azCategory;
+            case "en" -> enTitle;
+            case "ru" -> ruTitle;
+            default -> azTitle;
         };
     }
 
@@ -49,14 +47,6 @@ public class Project extends BaseEntity {
             case "en" -> enDescription;
             case "ru" -> ruDescription;
             default -> azDescription;
-        };
-    }
-
-    public String getProjectName(String lang) {
-        return switch (lang) {
-            case "en" -> enProjectName;
-            case "ru" -> ruProjectName;
-            default -> azProjectName;
         };
     }
 }

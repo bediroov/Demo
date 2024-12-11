@@ -1,7 +1,6 @@
 package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,27 +19,18 @@ public class News extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String azTitle;
-    @NotNull
     private String azDescription;
-    @NotNull
-    private String azAuthor;
 
     private String enTitle;
     private String enDescription;
-    private String enAuthor;
 
     private String ruTitle;
     private String ruDescription;
-    private String ruAuthor;
 
-    private String imageName;
-    private String ImageType;
+    private String ImageUrl;
 
-//    @Lob
-//    @Column(name = "image_data")
-//    private byte[] imageData;
+    private String optional;
 
     public String getNewsTitle(String lang) {
         return switch (lang) {
@@ -57,13 +47,4 @@ public class News extends BaseEntity implements Serializable {
             default -> azDescription;
         };
     }
-
-    public String getNewsAuthor(String lang) {
-        return switch (lang) {
-            case "en" -> enAuthor;
-            case "ru" -> ruAuthor;
-            default -> azAuthor;
-        };
-    }
-
 }

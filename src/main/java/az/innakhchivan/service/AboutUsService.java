@@ -16,92 +16,58 @@ import java.util.stream.Collectors;
 public class AboutUsService {
     private final AboutUsRepository aboutUsRepository;
 
-    AboutUs about = new AboutUs();
 
-    public AboutResponseDto createAbout(AboutRequestDto aboutRequestDto, String lang) {
+    public AboutResponseDto createAbout(AboutRequestDto aboutRequestDto) {
 
-        switch (lang) {
-            case "az":
-                about.setAzTitle(aboutRequestDto.getTitle());
-                about.setAzDescription(aboutRequestDto.getDescription());
-                break;
-            case "en":
-                about.setEnTitle(aboutRequestDto.getTitle());
-                about.setEnDescription(aboutRequestDto.getDescription());
-                break;
-            case "ru":
-                about.setRuTitle(aboutRequestDto.getTitle());
-                about.setRuDescription(aboutRequestDto.getDescription());
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported language " + lang);
+        AboutUs about = new AboutUs();
 
-        }
+        about.setAzTitle(aboutRequestDto.getAzTitle());
+        about.setAzDescription(aboutRequestDto.getAzDescription());
+        about.setEnTitle(aboutRequestDto.getEnTitle());
+        about.setEnDescription(aboutRequestDto.getEnDescription());
+        about.setRuTitle(aboutRequestDto.getRuTitle());
+        about.setRuDescription(aboutRequestDto.getRuDescription());
+        about.setImageUrl(aboutRequestDto.getImageUrl());
 
         aboutUsRepository.save(about);
 
-        return new AboutResponseDto(
-                about.getId(),
-                about.getAboutUsTitle(lang),
-                about.getAboutUsDescription(lang)
-        );
+        return AboutResponseDto.builder()
+                .id(about.getId())
+                .build();
     }
 
-    public AboutResponseDto updateAbout(Long id, AboutRequestDto aboutRequestDto, String lang) {
-        about = aboutUsRepository.findById(id).orElseThrow(
+    public String updateAbout(Long id, AboutRequestDto aboutRequestDto) {
+        AboutUs about = aboutUsRepository.findById(id).orElseThrow(
                 () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
 
-        switch (lang) {
-            case "az":
-                about.setAzTitle(aboutRequestDto.getTitle());
-                about.setAzDescription(aboutRequestDto.getDescription());
-                break;
-            case "en":
-                about.setEnTitle(aboutRequestDto.getTitle());
-                about.setEnDescription(aboutRequestDto.getDescription());
-                break;
-            case "ru":
-                about.setRuTitle(aboutRequestDto.getTitle());
-                about.setRuDescription(aboutRequestDto.getDescription());
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported language " + lang);
-
-        }
+        about.setAzTitle(aboutRequestDto.getAzTitle());
+        about.setAzDescription(aboutRequestDto.getAzDescription());
+        about.setEnTitle(aboutRequestDto.getEnTitle());
+        about.setEnDescription(aboutRequestDto.getEnDescription());
+        about.setRuTitle(aboutRequestDto.getRuTitle());
+        about.setRuDescription(aboutRequestDto.getRuDescription());
+        about.setImageUrl(aboutRequestDto.getImageUrl());
 
         aboutUsRepository.save(about);
 
-        return new AboutResponseDto(
-                about.getId(),
-                about.getAboutUsTitle(lang),
-                about.getAboutUsDescription(lang)
-        );
+        return "About us updated successfully";
     }
 
-    public AboutResponseDto getAboutById(Long id, String lang) {
-        about = aboutUsRepository.findById(id).orElseThrow(
-                () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
-
-
-        return new AboutResponseDto(
-                about.getId(),
-                about.getAboutUsTitle(lang),
-                about.getAboutUsDescription(lang)
-        );
-    }
-
-    public List<AboutResponseDto> getAboutAll(String lang) {
+    public List<AboutResponseDto> getAbout(String lang) {
         return aboutUsRepository.findAll().stream()
                 .map(aboutUs -> new AboutResponseDto(
                         aboutUs.getId(),
                         aboutUs.getAboutUsTitle(lang),
-                        aboutUs.getAboutUsDescription(lang)
+                        aboutUs.getAboutUsDescription(lang),
+                        aboutUs.getImageUrl()
                 ))
                 .collect(Collectors.toList());
     }
 
+
+
     public void deletedAbout(Long id) {
-        about = aboutUsRepository.findById(id).orElseThrow(
+       AboutUs about = aboutUsRepository.findById(id).orElseThrow(
                 () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
 
         aboutUsRepository.delete(about);

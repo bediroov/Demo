@@ -14,40 +14,32 @@ import java.util.List;
 @RequestMapping("/api/v1/project")
 @RequiredArgsConstructor
 public class ProjectController {
-
     private final ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<ProjectResponseDto> addedProject (@RequestBody ProjectRequestDto projectRequestDto,
-                                                            @RequestParam(required = false, defaultValue = "az") String lang) {
-        ProjectResponseDto projectResponseDto = projectService.addProject(projectRequestDto, lang);
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<ProjectResponseDto> addProject(
+            @RequestBody ProjectRequestDto projectRequestDto) {
+        ProjectResponseDto project = projectService.addProject(projectRequestDto);
+        return new ResponseEntity<>(project, HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<ProjectResponseDto> getProjectById(@PathVariable Long id,
-                                                             @RequestParam(required = false, defaultValue = "az") String lang) {
-        ProjectResponseDto projectResponseDto = projectService.getProjectById(id, lang);
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateProject(
+            @PathVariable Long id,
+            @RequestBody ProjectRequestDto projectRequestDto) {
+        String project = projectService.updateProject(id, projectRequestDto);
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<ProjectResponseDto> updatedProject(@PathVariable Long id,
-                                                             @RequestBody ProjectRequestDto projectRequestDto,
-                                                             @RequestParam(required = false, defaultValue = "az") String lang) {
-        ProjectResponseDto projectResponseDto = projectService.updateProject(id, projectRequestDto, lang);
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
-    }
-
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ProjectResponseDto>> getAllProjects(@RequestParam(required = false, defaultValue = "az") String lang) {
-        List<ProjectResponseDto> projectResponseDto = projectService.getAllProjects(lang);
-        return new ResponseEntity<>(projectResponseDto, HttpStatus.OK);
+        List<ProjectResponseDto> projects = projectService.getAllProjects(lang);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletedProject(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 }

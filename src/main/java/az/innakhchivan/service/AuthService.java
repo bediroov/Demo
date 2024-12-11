@@ -7,6 +7,7 @@ import az.innakhchivan.dto.response.LoginResponseDto;
 import az.innakhchivan.dto.response.RegisterResponseDto;
 import az.innakhchivan.entity.TokenEntity;
 import az.innakhchivan.entity.UserEntity;
+import az.innakhchivan.exception.CustomValidationException;
 import az.innakhchivan.exception.UserAlreadyExistsException;
 import az.innakhchivan.repository.TokenRepository;
 import az.innakhchivan.repository.UserRepository;
@@ -14,7 +15,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +26,6 @@ import java.util.List;
 
 import static az.innakhchivan.enums.ErrorMessage.*;
 import static az.innakhchivan.mapper.TokenMapper.buildTokenEntity;
-import static az.innakhchivan.mapper.UserMapper.USER_MAPPER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -47,6 +46,10 @@ public class AuthService {
         if (user1.isPresent())
             throw new UserAlreadyExistsException("User already exists with Email: " + request.getEmail());
 
+        if (!isValidPassword(request.getPassword())) {
+            throw new CustomValidationException("Password must contain at least one uppercase letter, " +
+                    "one lowercase letter, one number, and one special character (@#$%^&+=.)");
+        }
         UserEntity user = new UserEntity();
 
         user.setEmail(request.getEmail());
@@ -117,12 +120,42 @@ public class AuthService {
         }
     }
 
+
+//    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+//        // Authorization başlığını oxuyuruq
+//        String authHeader = request.getHeader(AUTHORIZATION);
+//
+//        // Başlıq yoxdursa və ya "Bearer " ilə başlamırsa, logout-u yerinə yetirmirik
+//        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//            return ResponseEntity.badRequest().body("Invalid logout request");
+//        }
+//
+//        // Tokeni başlıqdan çıxarırıq
+//        String token = authHeader.substring(7);
+//
+//        // Tokeni veritabanında tapıb deaktivləşdiririk
+//        TokenEntity tokenEntity = tokenRepository.findByAccessToken(token)
+//                .orElseThrow(() -> new EntityNotFoundException("Token not found"));
+//
+//        // Tokeni deaktivləşdiririk
+//        tokenEntity.setLoggedOut(true);
+//        tokenRepository.save(tokenEntity);
+//
+//        // SecurityContextHolder-i təmizləyirik
+//        SecurityContextHolder.clearContext();
+//
+//        // Logout uğurlu olduğu barədə cavab qaytarırıq
+//        return ResponseEntity.ok("Logout successful");
+//    }
+
+
     public AuthResponseDto getUserById(Long id) {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_BY_ID.format(id)));
 
         return AuthResponseDto.builder().id(user.getId()).build();
     }
+
 
     private void revokeAllTokenByUser(UserEntity user) {
         List<TokenEntity> validTokens = tokenRepository.findAllAccessTokensByUser(user.getId());
@@ -135,5 +168,10 @@ public class AuthService {
     private void saveUserToken(String accessToken, String refreshToken, UserEntity user) {
         var token = buildTokenEntity(accessToken, refreshToken, user);
         tokenRepository.save(token);
+    }
+
+    private boolean isValidPassword(String password) {
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=.]).{5,}$";
+        return password != null && password.matches(passwordPattern);
     }
 }

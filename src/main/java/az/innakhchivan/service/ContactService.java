@@ -16,57 +16,30 @@ import java.util.stream.Collectors;
 public class ContactService {
     private final ContactRepository contactRepository;
 
-    public ContactResponseDto createContact(ContactRequestDto contactRequestDto) {
+    public String createContact(ContactRequestDto contactRequestDto) {
         Contact contact = new Contact();
+        contact.setName(contactRequestDto.getName());
+        contact.setSurname(contactRequestDto.getSurname());
         contact.setPhone(contactRequestDto.getPhone());
         contact.setEmail(contactRequestDto.getEmail());
-        contact.setAddress(contactRequestDto.getAddress());
+        contact.setApplicationContent(contactRequestDto.getApplicationContent());
         contactRepository.save(contact);
 
-        return ContactResponseDto.builder()
-                .id(contact.getId())
-                .phone(contact.getPhone())
-                .email(contact.getEmail())
-                .address(contact.getAddress())
-                .build();
+        return "Your request has been sent successfully!";
     }
 
-    public ContactResponseDto updateContact(Long Id, ContactRequestDto contactRequestDto) {
-        Contact contact = contactRepository.findById(Id).orElseThrow(
-                () -> new ContactNotFoundException("Contact not found Id : " + Id));
-        contact.setPhone(contactRequestDto.getPhone());
-        contact.setEmail(contactRequestDto.getEmail());
-        contact.setAddress(contactRequestDto.getAddress());
-        contactRepository.save(contact);
 
-        return ContactResponseDto.builder()
-                .id(contact.getId())
-                .phone(contact.getPhone())
-                .email(contact.getEmail())
-                .address(contact.getAddress())
-                .build();
-
-    }
-
-    public ContactResponseDto getByIdContact(Long Id) {
-        Contact contact = contactRepository.findById(Id).orElseThrow(
-                () -> new ContactNotFoundException("Contact not found Id : " + Id));
-
-        return ContactResponseDto.builder()
-                .id(contact.getId())
-                .phone(contact.getPhone())
-                .email(contact.getEmail())
-                .address(contact.getAddress())
-                .build();
-    }
 
     public List<ContactResponseDto> getContactsAll() {
         return contactRepository.findAll().stream()
                 .map(x -> new ContactResponseDto(
                         x.getId(),
+                        x.getName(),
+                        x.getSurname(),
                         x.getPhone(),
                         x.getEmail(),
-                        x.getAddress()
+                        x.getApplicationContent(),
+                        x.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
     }

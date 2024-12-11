@@ -2,4 +2,4 @@ spring:
   application:
     name: in-nakhchivan-backend
   profiles:
-    active: dev  #local
+    active: dev

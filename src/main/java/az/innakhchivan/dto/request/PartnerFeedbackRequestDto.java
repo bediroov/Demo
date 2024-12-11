@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PartnerFeedbackRequestDto {
+    private Long id;
     private String partnerFullName;
     private String comment;
 }

@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequestDto {

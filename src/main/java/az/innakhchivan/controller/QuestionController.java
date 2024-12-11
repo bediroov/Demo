@@ -17,27 +17,19 @@ public class QuestionController {
 
 private final QuestionService questionService;
     @PostMapping
-    public ResponseEntity<QuestionResponseDto> createdQuestion(@RequestBody QuestionRequestDto questionRequestDto,
-                                                               @RequestParam(required = false, defaultValue = "az") String lang) {
-        QuestionResponseDto created = questionService.createQuestion(questionRequestDto, lang);
+    public ResponseEntity<QuestionResponseDto> createdQuestion(@RequestBody QuestionRequestDto questionRequestDto) {
+        QuestionResponseDto created = questionService.createQuestion(questionRequestDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{Id}")
-    public ResponseEntity<QuestionResponseDto> updateQuestion(@PathVariable Long Id,
-                                                              @RequestBody QuestionRequestDto questionRequestDto,
-                                                              @RequestParam(required = false, defaultValue = "az") String lang) {
-        QuestionResponseDto responseDto = questionService.updateQuestion(Id, questionRequestDto, lang);
+    @PutMapping("/{Id}")
+    public ResponseEntity<String> updateQuestion(@PathVariable Long Id,
+                                                              @RequestBody QuestionRequestDto questionRequestDto) {
+        String responseDto = questionService.updateQuestion(Id, questionRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{Id}")
-    public ResponseEntity<QuestionResponseDto> getQuestionById(@PathVariable Long Id, @RequestParam(required = false, defaultValue = "az") String lang) {
-        QuestionResponseDto questionResponseDto = questionService.getQuestionById(Id, lang);
-        return new ResponseEntity<>(questionResponseDto, HttpStatus.OK);
-    }
-
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<QuestionResponseDto>> getAllQuestion(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<QuestionResponseDto> questionResponseDto = questionService.getQuestionAll(lang);
         return new ResponseEntity<>(questionResponseDto, HttpStatus.OK);
@@ -46,7 +38,7 @@ private final QuestionService questionService;
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deletedQuestion(@PathVariable Long Id) {
         questionService.deletedQuestion(Id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -19,24 +19,18 @@ public class Sector {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private String azCategory;
-    @NotNull
     private String azDescription;
 
-    private String enCategory;
     private String enDescription;
 
-    private String ruCategory;
     private String ruDescription;
 
-    public String getSectorCategory(String lang) {
-        return switch (lang) {
-            case "en" -> enCategory;
-            case "ru" -> ruCategory;
-            default -> azCategory;
-        };
-    }
+    private String imageUrl;
+    private String iconUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     public String getSectorDescription(String lang) {
         return switch (lang) {

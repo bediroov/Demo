@@ -2,8 +2,10 @@ package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.ProjectRequestDto;
 import az.innakhchivan.dto.response.ProjectResponseDto;
+import az.innakhchivan.entity.Category;
 import az.innakhchivan.entity.Project;
 import az.innakhchivan.exception.ProjectNotFoundException;
+import az.innakhchivan.repository.CategoryRepository;
 import az.innakhchivan.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,101 +17,71 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final CategoryRepository categoryRepository;
 
-    Project project = new Project();
 
-    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto, String lang) {
+    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
+        Project project = new Project();
 
-        switch (lang) {
-            case "en":
-                project.setEnCategory(projectRequestDto.getCategory());
-                project.setEnProjectName(projectRequestDto.getProjectName());
-                project.setEnDescription(projectRequestDto.getDescription());
-                break;
-            case "ru":
-                project.setRuCategory(projectRequestDto.getCategory());
-                project.setRuProjectName(projectRequestDto.getProjectName());
-                project.setRuDescription(projectRequestDto.getDescription());
-                break;
-            default:
-                project.setAzCategory(projectRequestDto.getCategory());
-                project.setAzProjectName(projectRequestDto.getProjectName());
-                project.setAzDescription(projectRequestDto.getDescription());
-                break;
-        }
+        project.setAzTitle(projectRequestDto.getAzTitle());
+        project.setAzDescription(projectRequestDto.getAzDescription());
+        project.setEnTitle(projectRequestDto.getEnTitle());
+        project.setEnDescription(projectRequestDto.getEnDescription());
+        project.setRuTitle(projectRequestDto.getRuTitle());
+        project.setRuDescription(projectRequestDto.getRuDescription());
+        project.setImageUrl(projectRequestDto.getImageUrl());
+
+        Category category = categoryRepository.findById(projectRequestDto.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + projectRequestDto.getCategoryId()));
+        project.setCategory(category);
+
         projectRepository.save(project);
 
         return ProjectResponseDto.builder()
                 .id(project.getId())
-                .category(project.getProjectCategory(lang))
-                .projectName(project.getProjectName(lang))
-                .description(project.getProjectDescription(lang))
-                .createdAt(project.getCreatedAt())
                 .build();
     }
 
-    public ProjectResponseDto updateProject(Long id, ProjectRequestDto projectRequestDto, String lang) {
+    public String updateProject(Long id, ProjectRequestDto projectRequestDto) {
 
-        project = projectRepository.findById(id).orElseThrow(
+       Project project = projectRepository.findById(id).orElseThrow(
         ()-> new ProjectNotFoundException(String.format("Project with id %s not found", id)));
 
-        switch (lang) {
-            case "en":
-                project.setEnCategory(projectRequestDto.getCategory());
-                project.setEnProjectName(projectRequestDto.getProjectName());
-                project.setEnDescription(projectRequestDto.getDescription());
-                break;
-            case "ru":
-                project.setRuCategory(projectRequestDto.getCategory());
-                project.setRuProjectName(projectRequestDto.getProjectName());
-                project.setRuDescription(projectRequestDto.getDescription());
-                break;
-            default:
-                project.setAzCategory(projectRequestDto.getCategory());
-                project.setAzProjectName(projectRequestDto.getProjectName());
-                project.setAzDescription(projectRequestDto.getDescription());
-                break;
-        }
+        project.setAzTitle(projectRequestDto.getAzTitle());
+        project.setAzDescription(projectRequestDto.getAzDescription());
+        project.setEnTitle(projectRequestDto.getEnTitle());
+        project.setEnDescription(projectRequestDto.getEnDescription());
+        project.setRuTitle(projectRequestDto.getRuTitle());
+        project.setRuDescription(projectRequestDto.getRuDescription());
+        project.setImageUrl(projectRequestDto.getImageUrl());
+
+        Category category = categoryRepository.findById(projectRequestDto.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + projectRequestDto.getCategoryId()));
+        project.setCategory(category);
+
         projectRepository.save(project);
 
-        return ProjectResponseDto.builder()
-                .id(project.getId())
-                .category(project.getProjectCategory(lang))
-                .projectName(project.getProjectName(lang))
-                .description(project.getProjectDescription(lang))
-                .createdAt(project.getCreatedAt())
-                .build();
-
+        return "Project updated Successfully";
 
     }
 
-    public ProjectResponseDto getProjectById(Long id,String lang) {
-        project = projectRepository.findById(id).orElseThrow(
-                ()-> new ProjectNotFoundException(String.format("Project with id %s not found", id)));
-
-        return ProjectResponseDto.builder()
-                .id(project.getId())
-                .category(project.getProjectCategory(lang))
-                .projectName(project.getProjectName(lang))
-                .description(project.getProjectDescription(lang))
-                .createdAt(project.getCreatedAt())
-                .build();
-    }
 
     public List<ProjectResponseDto> getAllProjects(String lang) {
         return projectRepository.findAll().stream()
-                .map(x -> new ProjectResponseDto(
-                        x.getId(),
-                        x.getProjectCategory(lang),
-                        x.getProjectName(lang),
-                        x.getProjectDescription(lang),
-                        x.getCreatedAt())
-                )
+                .map(project -> new ProjectResponseDto(
+                        project.getId(),
+                        project.getProjectTitle(lang),
+                        project.getProjectDescription(lang),
+                        project.getImageUrl(),
+                        project.getCategory().getCategoryName(lang),
+                        project.getCreatedAt()
+                ))
                 .collect(Collectors.toList());
     }
 
+
     public void deleteProject(Long id) {
-        project = projectRepository.findById(id).orElseThrow(
+       Project project = projectRepository.findById(id).orElseThrow(
                 ()-> new ProjectNotFoundException(String.format("Project with id %s not found", id))
         );
         projectRepository.delete(project);

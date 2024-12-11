@@ -19,36 +19,27 @@ public class SectorController {
     private final SectorService sectorService;
 
     @PostMapping
-    public ResponseEntity<SectorResponseDto> addSector(@Valid @RequestBody SectorRequestDto sectorRequestDto,
-                                                       @RequestParam(required = false, defaultValue = "az") String lang) {
-        SectorResponseDto responseDto = sectorService.addSector(sectorRequestDto, lang);
+    public ResponseEntity<SectorResponseDto> addSector(@Valid @RequestBody SectorRequestDto sectorRequestDto) {
+        SectorResponseDto responseDto = sectorService.addSector(sectorRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SectorResponseDto> getSectorById(@PathVariable Long id,
-                                                           @RequestParam(required = false, defaultValue = "az") String lang) {
-        SectorResponseDto responseDto = sectorService.getSectorById(id, lang);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SectorResponseDto>> getAllSectors(@RequestParam(required = false, defaultValue = "az") String lang) {
-        List<SectorResponseDto> newsList = sectorService.getAllNews(lang);
-        return ResponseEntity.ok(newsList);
+        List<SectorResponseDto> newsList = sectorService.getAllSector(lang);
+        return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SectorResponseDto> updateSector(@PathVariable Long id,
-                                                          @Valid @RequestBody SectorRequestDto sectorRequestDto,
-                                                          @RequestParam(required = false, defaultValue = "az") String lang) {
-        SectorResponseDto responseDto = sectorService.updateSector(id, sectorRequestDto, lang);
-        return ResponseEntity.ok(responseDto);
+    public ResponseEntity<String> updateSector(@PathVariable Long id,
+                                                          @Valid @RequestBody SectorRequestDto sectorRequestDto) {
+        String responseDto = sectorService.updateSector(id, sectorRequestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSector(@PathVariable Long id) {
         sectorService.deleteSector(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

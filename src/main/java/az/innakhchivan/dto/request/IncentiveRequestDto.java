@@ -6,6 +6,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class IncentiveRequestDto {
-    private String title;
-    private String description;
+    private String azTitle;
+    private String azDescription;
+
+    private String enTitle;
+    private String enDescription;
+
+    private String ruTitle;
+    private String ruDescription;
+
 }

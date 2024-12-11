@@ -9,11 +9,13 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Contact {
+public class Contact extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String surname;
     private String phone;
     private String email;
-    private String address;
+    private String applicationContent;
 }

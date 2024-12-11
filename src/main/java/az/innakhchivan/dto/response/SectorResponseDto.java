@@ -9,7 +9,8 @@ import lombok.*;
 @Builder
 public class SectorResponseDto {
     private Long id;
-    private String category;
+    private String categoryName;
     private String description;
-
+    private String imageUrl;
+    private String iconUrl;
 }

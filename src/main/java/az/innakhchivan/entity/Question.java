@@ -15,9 +15,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String azTitle;
-    @NotNull
     private String azDescription;
 
     private String enTitle;
@@ -25,13 +23,6 @@ public class Question {
 
     private String ruTitle;
     private String ruDescription;
-
-
-//    private String fileName;
-//    private String type;
-//
-//    @Lob
-//    private byte[] data;
 
     public String getQuestionTitle(String lang) {
         return switch (lang) {

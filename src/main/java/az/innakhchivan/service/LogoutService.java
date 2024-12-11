@@ -45,5 +45,6 @@ public class LogoutService implements LogoutHandler {
         } else {
             log.warn("Token not found during logout: {}", jwt);
         }
+
     }
 }

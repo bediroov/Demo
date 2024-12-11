@@ -1,8 +1,8 @@
 package az.innakhchivan.controller;
 
-import az.innakhchivan.entity.VideoGallery;
+import az.innakhchivan.dto.request.VideoGalleryRequestDto;
+import az.innakhchivan.dto.response.VideoGalleryResponseDto;
 import az.innakhchivan.service.VideoGalleryService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,27 +11,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/video")
+@RequestMapping("/api/v1/video-gallery")
 @RequiredArgsConstructor
 public class VideoGalleryController {
+
     private final VideoGalleryService videoGalleryService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<VideoGallery> uploadVideo(@Valid @RequestBody VideoGallery video) {
-        VideoGallery savedVideo = videoGalleryService.saveVideo(video);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedVideo);
+    @PostMapping
+    public ResponseEntity<VideoGalleryResponseDto> addedVideoUrl(@RequestBody VideoGalleryRequestDto videoGalleryRequestDto) {
+        VideoGalleryResponseDto responseDto = videoGalleryService.addVideoUrl(videoGalleryRequestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public List<VideoGallery> getAllVideos() {
-        return videoGalleryService.getAllVideos();
+
+    @GetMapping("/all")
+    public ResponseEntity<List<VideoGalleryResponseDto>> getAllVideos() {
+        List<VideoGalleryResponseDto> videos = videoGalleryService.getAllVideos();
+        return new ResponseEntity<>(videos, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VideoGallery> getVideoById(@PathVariable Long id) {
-        return videoGalleryService.getVideoById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVideoById(@PathVariable Long id) {
+        videoGalleryService.deleteVideoById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

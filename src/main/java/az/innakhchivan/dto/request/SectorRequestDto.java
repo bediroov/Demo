@@ -10,6 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SectorRequestDto {
-    private String category;
-    private String description;
+    private String azDescription;
+    private String enDescription;
+    private String ruDescription;
+    private String imageUrl;
+    private String iconUrl;
+    private Long categoryId;
 }

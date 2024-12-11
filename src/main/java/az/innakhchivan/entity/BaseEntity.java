@@ -20,7 +20,4 @@ public class BaseEntity {
     @Column(name = "update_at")
     @UpdateTimestamp
     private LocalDate updatedAt;
-
-    @Column(name = "status")
-    private Boolean status;
 }

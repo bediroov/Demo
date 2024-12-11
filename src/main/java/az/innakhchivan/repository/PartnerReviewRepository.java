@@ -1,9 +1,9 @@
 package az.innakhchivan.repository;
 
-import az.innakhchivan.entity.PartnerFeedback;
+import az.innakhchivan.entity.PartnerReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PartnerFeedbackRepository extends JpaRepository<PartnerFeedback, Long> {
+public interface PartnerReviewRepository  extends JpaRepository<PartnerReview, Long> {
 }

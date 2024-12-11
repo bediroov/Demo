@@ -12,9 +12,10 @@ import java.time.LocalDate;
 public class ProjectResponseDto {
 
     private Long id;
-    private String category;
-    private String projectName;
+    private String title;
     private String description;
+    private String imageUrl;
+    private String categoryName;
     private LocalDate createdAt;
 
 }

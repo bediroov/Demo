@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
     open-in-view: false #DB-ile is bitdikde session baglanir
     properties:
@@ -15,7 +15,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation=true
-        show_sql: false
+        show_sql: true
         dialect:  org.hibernate.dialect.PostgreSQLDialect
 
   servlet:
@@ -31,9 +31,15 @@ logging:
     org.hibernate: info
 
 server:
-  port: 8088
+  port: 8081
 
 jwt:
   key: cn5N5rbQ1ruPW7ZEbjV6XMToIHyhG9KgHbvZedQahvjqqU3Kv9tv8X6gK289IXVXHUSVhKbjCgyny0SVOBOSg==
   access-token-expiration: 300000
   refresh-token-expiration: 18000000
+image:
+  upload:
+    dir: C:/Users/nihada/images
+
+base:
+  url: http://localhost:8081

@@ -19,9 +19,7 @@ public class AboutUs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private String azTitle;
-    @NotNull
     private String azDescription;
 
     private String enTitle;
@@ -30,12 +28,8 @@ public class AboutUs {
     private String ruTitle;
     private String ruDescription;
 
+    private String imageUrl;
 
-//    private String fileName;
-//    private String type;
-//
-//    @Lob
-//    private byte[] data;
 
     public String getAboutUsTitle(String lang) {
         return switch (lang) {

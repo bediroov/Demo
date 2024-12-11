@@ -17,24 +17,12 @@ public class ContactController {
     private final ContactService contactService;
 
     @PostMapping
-    public ResponseEntity<ContactResponseDto> created(@RequestBody ContactRequestDto contactRequestDto) {
-        ContactResponseDto contactResponseDto = contactService.createContact(contactRequestDto);
+    public ResponseEntity<String> created(@RequestBody ContactRequestDto contactRequestDto) {
+        String contactResponseDto = contactService.createContact(contactRequestDto);
         return new ResponseEntity<>(contactResponseDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ContactResponseDto> updated(@PathVariable Long id, @RequestBody ContactRequestDto contactRequestDto) {
-        ContactResponseDto contactResponseDto = contactService.updateContact(id,contactRequestDto);
-        return new ResponseEntity<>(contactResponseDto, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ContactResponseDto> getById(@PathVariable Long id) {
-        ContactResponseDto contactResponseDto = contactService.getByIdContact(id);
-        return new ResponseEntity<>(contactResponseDto, HttpStatus.OK);
-    }
-
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ContactResponseDto>> getAll() {
         List<ContactResponseDto> contactResponseDto = contactService.getContactsAll();
         return new ResponseEntity<>(contactResponseDto, HttpStatus.OK);
@@ -42,8 +30,8 @@ public class ContactController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-         contactService.deleteContact(id);
-         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        contactService.deleteContact(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
