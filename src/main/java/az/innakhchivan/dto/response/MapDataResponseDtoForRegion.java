@@ -2,12 +2,13 @@ package az.innakhchivan.dto.response;
 
 import lombok.*;
 
-@Setter
+import java.util.Set;
+
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PictureResponseDto {
-    private String url;
-    private String message;
+public class MapDataResponseDtoForRegion {
+    private Long id;
 }

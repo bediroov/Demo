@@ -3,6 +3,7 @@ package az.innakhchivan.service;
 import az.innakhchivan.dto.request.PhotoGalleryRequestDto;
 import az.innakhchivan.dto.response.PhotoGalleryResponseDto;
 import az.innakhchivan.entity.PhotoGallery;
+import az.innakhchivan.exception.PhotoGalleryNotFoundException;
 import az.innakhchivan.repository.PhotoGalleryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,32 @@ public class PhotoGalleryService {
     private final PhotoGalleryRepository photoGalleryRepository;
 
 
-    public PhotoGalleryResponseDto addImageUrl(PhotoGalleryRequestDto photoGalleryRequestDto) {
+    public void addImageUrl(PhotoGalleryRequestDto photoGalleryRequestDto) {
         PhotoGallery photoGallery = new PhotoGallery();
 
         photoGallery.setImageUrl(photoGalleryRequestDto.getImageUrl());
 
         photoGalleryRepository.save(photoGallery);
+    }
 
-        return PhotoGalleryResponseDto.builder()
-                .id(photoGallery.getId())
-                .build();
+    public void  updateImageUrl(Long id, PhotoGalleryRequestDto photoGalleryRequestDto) {
+        PhotoGallery photoGallery = photoGalleryRepository.findById(id).orElseThrow(
+                ()-> new PhotoGalleryNotFoundException("PhotoGallery not found with id: " + id )
+        );
+
+        photoGallery.setImageUrl(photoGalleryRequestDto.getImageUrl());
+        photoGalleryRepository.save(photoGallery);
+    }
+
+
+    public PhotoGalleryResponseDto getPhotoGalleryById(Long id) {
+        PhotoGallery photoGalleryId = photoGalleryRepository.findById(id).orElseThrow(
+                ()-> new PhotoGalleryNotFoundException("PhotoGallery not found with id: " + id )
+        );
+        return new PhotoGalleryResponseDto(
+                photoGalleryId.getId(),
+                photoGalleryId.getImageUrl()
+        );
     }
 
 

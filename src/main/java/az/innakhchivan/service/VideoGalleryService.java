@@ -18,36 +18,50 @@ public class VideoGalleryService {
     private final VideoGalleryRepository videoGalleryRepository;
 
 
-        public VideoGalleryResponseDto addVideoUrl(VideoGalleryRequestDto videoGalleryRequestDto) {
-            VideoGallery videoGallery = new VideoGallery();
+    public void addVideoUrl(VideoGalleryRequestDto videoGalleryRequestDto) {
+        VideoGallery videoGallery = new VideoGallery();
 
-            videoGallery.setVideoUrl(videoGalleryRequestDto.getVideoUrl());
+        videoGallery.setVideoUrl(videoGalleryRequestDto.getVideoUrl());
 
-            videoGalleryRepository.save(videoGallery);
+        videoGalleryRepository.save(videoGallery);
+    }
 
-            return VideoGalleryResponseDto.builder()
-                    .id(videoGallery.getId())
-                    .build();
+    public void updateVideoUrl(Long id, VideoGalleryRequestDto videoGalleryRequestDto) {
+        VideoGallery videoGallery = videoGalleryRepository.findVideoGalleryById(id).orElseThrow(
+                () -> new VideoGalleryNotFoundException("Video Gallery not found with id: " + id)
+        );
+        videoGallery.setVideoUrl(videoGalleryRequestDto.getVideoUrl());
+        videoGalleryRepository.save(videoGallery);
+    }
+
+    public VideoGalleryResponseDto getVideoUrlById(Long id) {
+        VideoGallery videoGallery = videoGalleryRepository.findVideoGalleryById(id).orElseThrow(
+                () -> new VideoGalleryNotFoundException("Video Gallery not found with id: " + id)
+        );
+
+        return new VideoGalleryResponseDto(
+                videoGallery.getId(),
+                videoGallery.getVideoUrl()
+        );
+    }
+
+
+    public List<VideoGalleryResponseDto> getAllVideos() {
+        return videoGalleryRepository.findAll().stream()
+                .map(video -> new VideoGalleryResponseDto(
+                        video.getId(),
+                        video.getVideoUrl()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
+    public Void deleteVideoById(Long id) {
+        Optional<VideoGallery> videoGallery = videoGalleryRepository.findVideoGalleryById(id);
+        if (videoGallery.isPresent()) {
+            videoGalleryRepository.delete(videoGallery.get());
+            return null;
         }
-
-
-
-        public List<VideoGalleryResponseDto> getAllVideos() {
-            return videoGalleryRepository.findAll().stream()
-                    .map(video -> new VideoGalleryResponseDto(
-                            video.getId(),
-                            video.getVideoUrl()
-                    ))
-                    .collect(Collectors.toList());
-        }
-
-
-        public Void deleteVideoById(Long id) {
-            Optional<VideoGallery> videoGallery = videoGalleryRepository.findVideoGalleryById(id);
-            if (videoGallery.isPresent()) {
-                videoGalleryRepository.delete(videoGallery.get());
-                return null;
-            }
-            throw new VideoGalleryNotFoundException("VideoGallery not found with ID : " + id);
-        }
+        throw new VideoGalleryNotFoundException("VideoGallery not found with ID : " + id);
+    }
 }

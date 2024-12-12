@@ -1,7 +1,6 @@
 package az.innakhchivan.service;
 
 import az.innakhchivan.dto.response.ImageResponseDto;
-import az.innakhchivan.dto.response.PhotoGalleryResponseDto;
 import az.innakhchivan.exception.ImageProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

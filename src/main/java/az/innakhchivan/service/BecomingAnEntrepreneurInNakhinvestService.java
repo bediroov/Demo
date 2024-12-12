@@ -1,14 +1,11 @@
 package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.BecomingAnEntrepreneurInNakhinvestRequestDto;
-import az.innakhchivan.dto.request.IncentiveRequestDto;
-import az.innakhchivan.dto.response.BecomingAnEntrepreneurInNakhinvestResponseDto;
-import az.innakhchivan.dto.response.IncentiveResponseDto;
+import az.innakhchivan.dto.response.*;
 import az.innakhchivan.entity.BecomingAnEntrepreneurInNakhinvest;
 import az.innakhchivan.entity.Category;
-import az.innakhchivan.entity.Incentive;
 import az.innakhchivan.exception.BecomingAnEntrepreneurInNakhinvestNotFoundException;
-import az.innakhchivan.exception.IncentiveNotFoundException;
+import az.innakhchivan.exception.CategoryNotFoundException;
 import az.innakhchivan.repository.BecomingAnEntrepreneurInNakhinvestRepository;
 import az.innakhchivan.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +21,7 @@ public class BecomingAnEntrepreneurInNakhinvestService {
     private final BecomingAnEntrepreneurInNakhinvestRepository becomingAnEntrepreneurInNakhinvestRepository;
     private final CategoryRepository categoryRepository;
 
-    public BecomingAnEntrepreneurInNakhinvestResponseDto createEntrepreneur(BecomingAnEntrepreneurInNakhinvestRequestDto requestDto) {
+    public void createEntrepreneur(BecomingAnEntrepreneurInNakhinvestRequestDto requestDto) {
         BecomingAnEntrepreneurInNakhinvest nakhinvest = new BecomingAnEntrepreneurInNakhinvest();
 
         nakhinvest.setAzTitle(requestDto.getAzTitle());
@@ -36,21 +33,17 @@ public class BecomingAnEntrepreneurInNakhinvestService {
         nakhinvest.setIconUrl(requestDto.getIconUrl());
 
         Category category = categoryRepository.findById(requestDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + requestDto.getCategoryId()));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + requestDto.getCategoryId()));
         nakhinvest.setCategory(category);
 
         becomingAnEntrepreneurInNakhinvestRepository.save(nakhinvest);
-
-        return BecomingAnEntrepreneurInNakhinvestResponseDto.builder()
-                .id(nakhinvest.getId())
-                .build();
     }
 
-    public String updateEntrepreneur(Long id, BecomingAnEntrepreneurInNakhinvestRequestDto requestDto) {
+    public void updateEntrepreneur(Long id, BecomingAnEntrepreneurInNakhinvestRequestDto requestDto) {
        BecomingAnEntrepreneurInNakhinvest entrepreneur = becomingAnEntrepreneurInNakhinvestRepository.findById(id).orElseThrow(
                 () -> new BecomingAnEntrepreneurInNakhinvestNotFoundException("Becoming An Entrepreneur In Nakhinvest Not Found with Id : " + id));
 
-               entrepreneur.setAzTitle(requestDto.getAzTitle());
+        entrepreneur.setAzTitle(requestDto.getAzTitle());
         entrepreneur.setAzDescription(requestDto.getAzDescription());
         entrepreneur.setEnTitle(requestDto.getEnTitle());
         entrepreneur.setEnDescription(requestDto.getEnDescription());
@@ -60,12 +53,10 @@ public class BecomingAnEntrepreneurInNakhinvestService {
 
 
         Category category = categoryRepository.findById(requestDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + requestDto.getCategoryId()));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + requestDto.getCategoryId()));
         entrepreneur.setCategory(category);
 
         becomingAnEntrepreneurInNakhinvestRepository.save(entrepreneur);
-
-        return "Becoming An Entrepreneur Update Success";
     }
 
     public List<BecomingAnEntrepreneurInNakhinvestResponseDto> getEntrepreneurAll(String lang) {
@@ -79,6 +70,27 @@ public class BecomingAnEntrepreneurInNakhinvestService {
                 ))
                 .collect(Collectors.toList());
     }
+
+
+
+    public List<EntrepreneurInNakhinvestResponse> getAll() {
+        return becomingAnEntrepreneurInNakhinvestRepository.findAllWithCategory().stream()
+                .map(entrepreneur -> new EntrepreneurInNakhinvestResponse(
+                        entrepreneur.getId(),
+                        entrepreneur.getAzTitle(),
+                        entrepreneur.getAzDescription(),
+                        entrepreneur.getEnTitle(),
+                        entrepreneur.getEnDescription(),
+                        entrepreneur.getRuTitle(),
+                        entrepreneur.getRuDescription(),
+                        entrepreneur.getIconUrl(),
+                        new CategoryResponseDtoForRelation(
+                                entrepreneur.getCategory().getId()
+                        )
+                ))
+                .collect(Collectors.toList());
+    }
+
 
     public void deletedEntrepreneur(Long id) {
         BecomingAnEntrepreneurInNakhinvest entrepreneur = becomingAnEntrepreneurInNakhinvestRepository.findById(id).orElseThrow(

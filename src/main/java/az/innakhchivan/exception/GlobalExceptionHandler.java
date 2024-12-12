@@ -3,6 +3,7 @@ package az.innakhchivan.exception;
 import az.innakhchivan.dto.response.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.LazyInitializationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -257,5 +258,74 @@ public class GlobalExceptionHandler {
 //    }
 
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(CategoryNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(HttpStatus.NOT_FOUND.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+    @ExceptionHandler(DuplicateUniqueKeyException.class)
+    public ResponseEntity<ExceptionResponse> handleDuplicateUniqueKeyException(DuplicateUniqueKeyException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(HttpStatus.BAD_REQUEST.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    @ExceptionHandler(LazyInitializationException.class)
+    public ResponseEntity<String> handleLazyInitializationException(LazyInitializationException ex) {
+        return new ResponseEntity<>("Failed to fetch related data: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+
+    @ExceptionHandler(PartnerReviewNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handlePartnerReviewNotFoundException(PartnerReviewNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(NOT_FOUND.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    @ExceptionHandler(ReferenceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleReferenceNotFoundException(ReferenceNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(NOT_FOUND.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    @ExceptionHandler(PhotoGalleryNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handlePhotoGalleryNotFoundException(PhotoGalleryNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(NOT_FOUND.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
 
 }

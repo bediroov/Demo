@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class IncentiveService {
     private final IncentiveRepository incentiveRepository;
 
-    public IncentiveResponseDto createIncentive(IncentiveRequestDto incentiveRequestDto) {
+    public void createIncentive(IncentiveRequestDto incentiveRequestDto) {
 
         Incentive incentive = new Incentive();
 
@@ -29,13 +29,9 @@ public class IncentiveService {
         incentive.setRuDescription(incentiveRequestDto.getRuDescription());
 
         incentiveRepository.save(incentive);
-
-        return IncentiveResponseDto.builder()
-                .id(incentive.getId())
-                .build();
     }
 
-    public String updateIncentive(Long id, IncentiveRequestDto incentiveRequestDto) {
+    public void updateIncentive(Long id, IncentiveRequestDto incentiveRequestDto) {
        Incentive incentive = incentiveRepository.findById(id).orElseThrow(
                 () -> new IncentiveNotFoundException("Incentive not found Id : " + id));
 
@@ -47,8 +43,6 @@ public class IncentiveService {
         incentive.setRuDescription(incentiveRequestDto.getRuDescription());
 
         incentiveRepository.save(incentive);
-
-        return "Incentive updated successfully";
     }
 
     public List<IncentiveResponseDto> getIncentiveAll(String lang) {
@@ -57,6 +51,21 @@ public class IncentiveService {
                         incentive.getId(),
                         incentive.getIncentiveTitle(lang),
                         incentive.getIncentiveDescription(lang)
+                ))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<Incentive> getAll() {
+        return incentiveRepository.findAll().stream()
+                .map(incentive -> new Incentive(
+                        incentive.getId(),
+                        incentive.getAzTitle(),
+                        incentive.getAzDescription(),
+                        incentive.getEnTitle(),
+                        incentive.getEnDescription(),
+                        incentive.getRuTitle(),
+                        incentive.getRuDescription()
                 ))
                 .collect(Collectors.toList());
     }

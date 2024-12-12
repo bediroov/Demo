@@ -1,14 +1,17 @@
 package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.ProjectRequestDto;
-import az.innakhchivan.dto.response.ProjectResponseDto;
+import az.innakhchivan.dto.response.*;
+import az.innakhchivan.entity.BaseEntity;
 import az.innakhchivan.entity.Category;
 import az.innakhchivan.entity.Project;
+import az.innakhchivan.exception.CategoryNotFoundException;
 import az.innakhchivan.exception.ProjectNotFoundException;
 import az.innakhchivan.repository.CategoryRepository;
 import az.innakhchivan.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +23,7 @@ public class ProjectService {
     private final CategoryRepository categoryRepository;
 
 
-    public ProjectResponseDto addProject(ProjectRequestDto projectRequestDto) {
+    public void addProject(ProjectRequestDto projectRequestDto) {
         Project project = new Project();
 
         project.setAzTitle(projectRequestDto.getAzTitle());
@@ -32,17 +35,13 @@ public class ProjectService {
         project.setImageUrl(projectRequestDto.getImageUrl());
 
         Category category = categoryRepository.findById(projectRequestDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("Category not found with id: " + projectRequestDto.getCategoryId()));
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found with id: " + projectRequestDto.getCategoryId()));
         project.setCategory(category);
 
         projectRepository.save(project);
-
-        return ProjectResponseDto.builder()
-                .id(project.getId())
-                .build();
     }
 
-    public String updateProject(Long id, ProjectRequestDto projectRequestDto) {
+    public void updateProject(Long id, ProjectRequestDto projectRequestDto) {
 
        Project project = projectRepository.findById(id).orElseThrow(
         ()-> new ProjectNotFoundException(String.format("Project with id %s not found", id)));
@@ -61,8 +60,6 @@ public class ProjectService {
 
         projectRepository.save(project);
 
-        return "Project updated Successfully";
-
     }
 
 
@@ -78,6 +75,30 @@ public class ProjectService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public List<ProjectResponse> getAll() {
+        return projectRepository.findAllWithCategory().stream()
+                .map(project -> new ProjectResponse(
+                        project.getId(),
+                        project.getAzTitle(),
+                        project.getAzDescription(),
+                        project.getEnTitle(),
+                        project.getEnDescription(),
+                        project.getRuTitle(),
+                        project.getRuDescription(),
+                        project.getImageUrl(),
+                        new CategoryResponseDtoForRelation(
+                                project.getCategory().getId()
+                        ),
+                        project.getCreatedAt(),
+                        project.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
+
+
 
 
     public void deleteProject(Long id) {

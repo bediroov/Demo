@@ -3,6 +3,7 @@ package az.innakhchivan.service;
 import az.innakhchivan.dto.request.MapDataRequestDto;
 import az.innakhchivan.dto.response.MapDataResponse;
 import az.innakhchivan.dto.response.MapDataResponseDto;
+import az.innakhchivan.dto.response.RegionResponseDtoForRelation;
 import az.innakhchivan.entity.MapData;
 import az.innakhchivan.entity.Region;
 import az.innakhchivan.exception.MapDataNotFoundException;
@@ -22,7 +23,7 @@ public class MapDataService {
     private final RegionService regionService;
 
 
-    public MapDataResponse createMapData(MapDataRequestDto mapDataRequestDto) {
+    public void createMapData(MapDataRequestDto mapDataRequestDto) {
         MapData mapData = new MapData();
 
         mapData.setLocation(mapDataRequestDto.getLocation());
@@ -41,17 +42,12 @@ public class MapDataService {
 
         mapData.setIconUrl(mapDataRequestDto.getIconUrl());
 
-        // Region əlavə edin
         mapData.setRegion(regionService.getRegionByUniqueKey(mapDataRequestDto.getRegionUniqueKey()));
 
         mapDataRepository.save(mapData);
-        return MapDataResponse.builder()
-                .id(mapData.getId())
-                .build();
-
     }
 
-    public String updateMapData(Long id, MapDataRequestDto mapDataRequestDto) {
+    public void updateMapData(Long id, MapDataRequestDto mapDataRequestDto) {
         MapData mapData = mapDataRepository.findById(id).orElseThrow(
                 () -> new MapDataNotFoundException("MapData not found with id: " + id)
         );
@@ -77,8 +73,6 @@ public class MapDataService {
 
 
         mapDataRepository.save(mapData);
-
-        return "MapData successfully updated";
 
     }
 
@@ -116,6 +110,31 @@ public class MapDataService {
                 ))
                 .collect(Collectors.toList());
     }
+
+
+    public List<MapDataResponse> getAllMap() {
+        return mapDataRepository.findAllWithRegion().stream()
+                .map(mapData -> new MapDataResponse(
+                        mapData.getId(),
+                        mapData.getAzTitle(),
+                        mapData.getAzDescription(),
+                        mapData.getEnTitle(),
+                        mapData.getEnDescription(),
+                        mapData.getRuTitle(),
+                        mapData.getRuDescription(),
+                        mapData.getLocation(),
+                        mapData.getArea(),
+                        mapData.getAverageSalary(),
+                        mapData.getPopulation(),
+                        mapData.getIconUrl(),
+                        new RegionResponseDtoForRelation(
+                                mapData.getRegion().getId(),
+                                mapData.getRegion().getUniqueKey()
+                        )
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
     public List<MapDataResponseDto> getMapDataByRegionUniqueKey(String uniqueKey, String lang) {

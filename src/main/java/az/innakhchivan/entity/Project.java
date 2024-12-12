@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "project")
 @Getter
@@ -33,6 +35,19 @@ public class Project extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    public Project(Long id, String azTitle, String azDescription, String enTitle, String enDescription, String ruTitle, String ruDescription, String imageUrl, Category category, LocalDate createdAt) {
+        this.id = id;
+        this.azTitle = azTitle;
+        this.azDescription = azDescription;
+        this.enTitle = enTitle;
+        this.enDescription = enDescription;
+        this.ruTitle = ruTitle;
+        this.ruDescription = ruDescription;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.setCreatedAt(createdAt);
+    }
 
     public String getProjectTitle(String lang) {
         return switch (lang) {

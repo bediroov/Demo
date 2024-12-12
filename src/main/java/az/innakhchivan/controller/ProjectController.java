@@ -1,7 +1,9 @@
 package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.ProjectRequestDto;
+import az.innakhchivan.dto.response.ProjectResponse;
 import az.innakhchivan.dto.response.ProjectResponseDto;
+import az.innakhchivan.entity.Project;
 import az.innakhchivan.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,23 +19,27 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<ProjectResponseDto> addProject(
-            @RequestBody ProjectRequestDto projectRequestDto) {
-        ProjectResponseDto project = projectService.addProject(projectRequestDto);
-        return new ResponseEntity<>(project, HttpStatus.CREATED);
+    public ResponseEntity<Void> addProject(@RequestBody ProjectRequestDto projectRequestDto) {
+         projectService.addProject(projectRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProject(
-            @PathVariable Long id,
-            @RequestBody ProjectRequestDto projectRequestDto) {
-        String project = projectService.updateProject(id, projectRequestDto);
-        return new ResponseEntity<>(project, HttpStatus.OK);
+    public ResponseEntity<Void> updateProject(@PathVariable Long id,
+                                              @RequestBody ProjectRequestDto projectRequestDto) {
+        projectService.updateProject(id, projectRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProjectResponseDto>> getAllProjects(@RequestParam(required = false, defaultValue = "az") String lang) {
+        List<ProjectResponseDto> projects = projectService.getAllProjects(lang);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ProjectResponseDto>> getAllProjects(@RequestParam(required = false, defaultValue = "az") String lang) {
-        List<ProjectResponseDto> projects = projectService.getAllProjects(lang);
+    public ResponseEntity<List<ProjectResponse>> getAll() {
+        List<ProjectResponse> projects = projectService.getAll();
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 

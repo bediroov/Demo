@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class ContactService {
     private final ContactRepository contactRepository;
 
-    public String createContact(ContactRequestDto contactRequestDto) {
+    public void createContact(ContactRequestDto contactRequestDto) {
         Contact contact = new Contact();
         contact.setName(contactRequestDto.getName());
         contact.setSurname(contactRequestDto.getSurname());
@@ -24,10 +24,20 @@ public class ContactService {
         contact.setEmail(contactRequestDto.getEmail());
         contact.setApplicationContent(contactRequestDto.getApplicationContent());
         contactRepository.save(contact);
-
-        return "Your request has been sent successfully!";
     }
 
+
+    public void updateContact(Long id, ContactRequestDto contactRequestDto) {
+        Contact contact = contactRepository.findById(id).orElseThrow(
+                () -> new ContactNotFoundException("Contact not found with id: " + id)
+        );
+        contact.setName(contactRequestDto.getName());
+        contact.setSurname(contactRequestDto.getSurname());
+        contact.setPhone(contactRequestDto.getPhone());
+        contact.setEmail(contactRequestDto.getEmail());
+        contact.setApplicationContent(contactRequestDto.getApplicationContent());
+        contactRepository.save(contact);
+    }
 
 
     public List<ContactResponseDto> getContactsAll() {

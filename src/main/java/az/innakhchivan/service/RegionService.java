@@ -1,8 +1,11 @@
 package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.RegionRequestDto;
+import az.innakhchivan.dto.response.MapDataResponseDtoForRegion;
+import az.innakhchivan.dto.response.RegionResponse;
 import az.innakhchivan.dto.response.RegionResponseDto;
 import az.innakhchivan.entity.Region;
+import az.innakhchivan.exception.DuplicateUniqueKeyException;
 import az.innakhchivan.exception.RegionNotFoundException;
 import az.innakhchivan.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +19,12 @@ import java.util.stream.Collectors;
 public class RegionService {
     private final RegionRepository regionRepository;
 
-    public RegionResponseDto createRegion(RegionRequestDto regionRequestDto) {
+    public void createRegion(RegionRequestDto regionRequestDto) {
+
+        if (regionRepository.findByUniqueKey(regionRequestDto.getUniqueKey()).isPresent()) {
+            throw new DuplicateUniqueKeyException("Region with unique key '" + regionRequestDto.getUniqueKey() + "' already exists.");
+        }
+
         Region region = new Region();
 
         region.setUniqueKey(regionRequestDto.getUniqueKey());
@@ -26,12 +34,6 @@ public class RegionService {
         region.setIsActive(true);
 
         regionRepository.save(region);
-
-        return RegionResponseDto.builder()
-                .id(region.getId())
-                .uniqueKey(region.getUniqueKey())
-                .isActive(region.getIsActive())
-                .build();
     }
 
     public Region getRegionByUniqueKey(String uniqueKey) {
@@ -52,9 +54,9 @@ public class RegionService {
         return region.getIsActive();
     }
 
-    public List<RegionResponseDto> getAllRegions(String lang) {
+    public List<RegionResponse> getAllRegions(String lang) {
         return regionRepository.findAll().stream()
-                .map(x -> new RegionResponseDto(
+                .map(x -> new RegionResponse(
                         x.getId(),
                         x.getUniqueKey(),
                         x.getRegionName(lang),
@@ -62,5 +64,22 @@ public class RegionService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public List<RegionResponseDto> getAllRegionsWithMapData() {
+        return regionRepository.findAllWithMapData().stream()
+                .map(region -> new RegionResponseDto(
+                        region.getId(),
+                        region.getUniqueKey(),
+                        region.getAzName(),
+                        region.getEnName(),
+                        region.getRuName(),
+                        region.getIsActive(),
+                        region.getMapDataList().stream()
+                                .map(mapData -> new MapDataResponseDtoForRegion(mapData.getId()))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 }

@@ -2,6 +2,7 @@ package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.QuestionRequestDto;
 import az.innakhchivan.dto.response.QuestionResponseDto;
+import az.innakhchivan.entity.Question;
 import az.innakhchivan.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,22 +18,29 @@ public class QuestionController {
 
 private final QuestionService questionService;
     @PostMapping
-    public ResponseEntity<QuestionResponseDto> createdQuestion(@RequestBody QuestionRequestDto questionRequestDto) {
-        QuestionResponseDto created = questionService.createQuestion(questionRequestDto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<Void> createdQuestion(@RequestBody QuestionRequestDto questionRequestDto) {
+         questionService.createQuestion(questionRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{Id}")
-    public ResponseEntity<String> updateQuestion(@PathVariable Long Id,
-                                                              @RequestBody QuestionRequestDto questionRequestDto) {
-        String responseDto = questionService.updateQuestion(Id, questionRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    public ResponseEntity<Void> updateQuestion(@PathVariable Long Id,
+                                               @RequestBody QuestionRequestDto questionRequestDto) {
+        questionService.updateQuestion(Id, questionRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<QuestionResponseDto>> getAllQuestion(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<QuestionResponseDto> questionResponseDto = questionService.getQuestionAll(lang);
         return new ResponseEntity<>(questionResponseDto, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Question>> getAll() {
+        List<Question> questionResponse = questionService.getAll();
+        return new ResponseEntity<>(questionResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{Id}")

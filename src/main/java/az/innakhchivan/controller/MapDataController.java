@@ -3,6 +3,7 @@ package az.innakhchivan.controller;
 import az.innakhchivan.dto.request.MapDataRequestDto;
 import az.innakhchivan.dto.response.MapDataResponse;
 import az.innakhchivan.dto.response.MapDataResponseDto;
+import az.innakhchivan.entity.MapData;
 import az.innakhchivan.service.MapDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,17 +19,17 @@ public class MapDataController {
     private final MapDataService mapDataService;
 
     @PostMapping
-    public ResponseEntity<MapDataResponse> createdMapData(@RequestBody MapDataRequestDto requestDto) {
-        MapDataResponse responseDto = mapDataService.createMapData(requestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    public ResponseEntity<Void> createdMapData(@RequestBody MapDataRequestDto requestDto) {
+         mapDataService.createMapData(requestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatedMapData(@PathVariable Long id,
+    public ResponseEntity<Void> updatedMapData(@PathVariable Long id,
                                                  @RequestBody MapDataRequestDto mapDataRequestDto) {
 
-        String responseDto = mapDataService.updateMapData(id, mapDataRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        mapDataService.updateMapData(id, mapDataRequestDto);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -37,10 +38,16 @@ public class MapDataController {
         return new ResponseEntity<>(mapData, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<MapDataResponseDto>> getAllMapData(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<MapDataResponseDto> mapDataResponseDto = mapDataService.getAllMapData(lang);
         return new ResponseEntity<>(mapDataResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<MapDataResponse>> getAll() {
+        List<MapDataResponse> mapDataResponse = mapDataService.getAllMap();
+        return new ResponseEntity<>(mapDataResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

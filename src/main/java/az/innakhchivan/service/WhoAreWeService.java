@@ -3,6 +3,7 @@ package az.innakhchivan.service;
 import az.innakhchivan.dto.request.AboutRequestDto;
 import az.innakhchivan.dto.request.WhoAreWeRequestDto;
 import az.innakhchivan.dto.response.AboutResponseDto;
+import az.innakhchivan.dto.response.WhoAreWeResponse;
 import az.innakhchivan.dto.response.WhoAreWeResponseDto;
 import az.innakhchivan.entity.AboutUs;
 import az.innakhchivan.entity.WhoAreWe;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class WhoAreWeService {
     private final WhoAreWeRepository whoAreWeRepository;
 
-    public WhoAreWeResponseDto createWhoAreWe(WhoAreWeRequestDto whoAreWeRequestDto) {
+    public void createWhoAreWe(WhoAreWeRequestDto whoAreWeRequestDto) {
 
         WhoAreWe whoAreWe = new WhoAreWe();
 
@@ -32,13 +33,9 @@ public class WhoAreWeService {
         whoAreWe.setRuDescription(whoAreWeRequestDto.getRuDescription());
 
         whoAreWeRepository.save(whoAreWe);
-
-        return WhoAreWeResponseDto.builder()
-                .id(whoAreWe.getId())
-                .build();
     }
 
-    public String updateWhoAreWe(Long id, WhoAreWeRequestDto whoAreWeRequestDto) {
+    public void updateWhoAreWe(Long id, WhoAreWeRequestDto whoAreWeRequestDto) {
         WhoAreWe whoAreWe = whoAreWeRepository.findById(id).orElseThrow(
                 () -> new AboutUsNotFoundException("WhoAreWe not found Id : " + id));
 
@@ -50,9 +47,24 @@ public class WhoAreWeService {
         whoAreWe.setRuDescription(whoAreWeRequestDto.getRuDescription());
 
         whoAreWeRepository.save(whoAreWe);
-
-        return "About us updated successfully";
     }
+
+    public WhoAreWeResponse getWhoAreWeById(Long id) {
+        WhoAreWe whoAreWe = whoAreWeRepository.findById(id).orElseThrow(
+                () -> new AboutUsNotFoundException("WhoAreWe not found Id : " + id));
+
+       return WhoAreWeResponse.builder()
+               .id(whoAreWe.getId())
+               .azTitle(whoAreWe.getAzTitle())
+               .azDescription(whoAreWe.getAzDescription())
+               .enTitle(whoAreWe.getEnTitle())
+               .enDescription(whoAreWe.getEnDescription())
+               .ruTitle(whoAreWe.getRuTitle())
+               .ruDescription(whoAreWe.getRuDescription())
+               .build();
+    }
+
+
 
     public List<WhoAreWeResponseDto> getAllWhoAreWe(String lang) {
         return whoAreWeRepository.findAll().stream()
@@ -63,6 +75,22 @@ public class WhoAreWeService {
                 ))
                 .collect(Collectors.toList());
     }
+
+
+    public List<WhoAreWeResponse> getAll() {
+        return whoAreWeRepository.findAll().stream()
+                .map(x -> new WhoAreWeResponse(
+                        x.getId(),
+                        x.getAzTitle(),
+                        x.getAzDescription(),
+                        x.getEnTitle(),
+                        x.getEnDescription(),
+                        x.getRuTitle(),
+                        x.getRuDescription()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
 
 

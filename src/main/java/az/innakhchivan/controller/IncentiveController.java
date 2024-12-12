@@ -2,6 +2,7 @@ package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.IncentiveRequestDto;
 import az.innakhchivan.dto.response.IncentiveResponseDto;
+import az.innakhchivan.entity.Incentive;
 import az.innakhchivan.service.IncentiveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,23 +19,30 @@ public class IncentiveController {
     private final IncentiveService incentiveService;
 
     @PostMapping
-    public ResponseEntity<IncentiveResponseDto> createdIncentive(@RequestBody IncentiveRequestDto incentiveRequestDto) {
-        IncentiveResponseDto created = incentiveService.createIncentive(incentiveRequestDto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<Void> createdIncentive(@RequestBody IncentiveRequestDto incentiveRequestDto) {
+        incentiveService.createIncentive(incentiveRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{Id}")
-    public ResponseEntity<String> updateIncentive(@PathVariable Long Id,
+    public ResponseEntity<Void> updateIncentive(@PathVariable Long Id,
                                                                 @RequestBody IncentiveRequestDto incentiveRequestDto) {
-        String responseDto = incentiveService.updateIncentive(Id, incentiveRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+       incentiveService.updateIncentive(Id, incentiveRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<IncentiveResponseDto>> getAllIncentive(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<IncentiveResponseDto> incentiveResponseDto = incentiveService.getIncentiveAll(lang);
         return new ResponseEntity<>(incentiveResponseDto, HttpStatus.OK);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Incentive>> getAll() {
+        List<Incentive> incentiveResponse = incentiveService.getAll();
+        return new ResponseEntity<>(incentiveResponse, HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/{Id}")
     public ResponseEntity<Void> deletedIncentive(@PathVariable Long Id) {

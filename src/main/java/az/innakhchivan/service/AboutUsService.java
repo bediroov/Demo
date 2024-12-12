@@ -17,7 +17,7 @@ public class AboutUsService {
     private final AboutUsRepository aboutUsRepository;
 
 
-    public AboutResponseDto createAbout(AboutRequestDto aboutRequestDto) {
+    public void createAbout(AboutRequestDto aboutRequestDto) {
 
         AboutUs about = new AboutUs();
 
@@ -30,13 +30,9 @@ public class AboutUsService {
         about.setImageUrl(aboutRequestDto.getImageUrl());
 
         aboutUsRepository.save(about);
-
-        return AboutResponseDto.builder()
-                .id(about.getId())
-                .build();
     }
 
-    public String updateAbout(Long id, AboutRequestDto aboutRequestDto) {
+    public void updateAbout(Long id, AboutRequestDto aboutRequestDto) {
         AboutUs about = aboutUsRepository.findById(id).orElseThrow(
                 () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
 
@@ -49,8 +45,6 @@ public class AboutUsService {
         about.setImageUrl(aboutRequestDto.getImageUrl());
 
         aboutUsRepository.save(about);
-
-        return "About us updated successfully";
     }
 
     public List<AboutResponseDto> getAbout(String lang) {
@@ -71,5 +65,20 @@ public class AboutUsService {
                 () -> new AboutUsNotFoundException("AboutUs not found Id : " + id));
 
         aboutUsRepository.delete(about);
+    }
+
+    public List<AboutUs> getAllAbout() {
+        return aboutUsRepository.findAll().stream()
+                .map(aboutUs -> new AboutUs(
+                        aboutUs.getId(),
+                        aboutUs.getAzTitle(),
+                        aboutUs.getAzDescription(),
+                        aboutUs.getEnTitle(),
+                        aboutUs.getEnDescription(),
+                        aboutUs.getRuTitle(),
+                        aboutUs.getRuDescription(),
+                        aboutUs.getImageUrl()
+                ))
+                .collect(Collectors.toList());
     }
 }

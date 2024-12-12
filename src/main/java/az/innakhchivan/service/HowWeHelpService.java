@@ -23,7 +23,7 @@ public class HowWeHelpService {
     private final HowWeHelpRepository howWeHelpRepository;
 
 
-    public HowWeHelpResponseDto createHowWeHelp(HowWeHelpRequestDto howWeHelpRequestDto) {
+    public void createHowWeHelp(HowWeHelpRequestDto howWeHelpRequestDto) {
 
         HowWeHelp howWeHelp = new HowWeHelp();
 
@@ -35,13 +35,9 @@ public class HowWeHelpService {
         howWeHelp.setRuDescription(howWeHelpRequestDto.getRuDescription());
 
         howWeHelpRepository.save(howWeHelp);
-
-        return HowWeHelpResponseDto.builder()
-                .id(howWeHelp.getId())
-                .build();
     }
 
-    public String update(Long id, HowWeHelpRequestDto howWeHelpRequestDto) {
+    public void update(Long id, HowWeHelpRequestDto howWeHelpRequestDto) {
         HowWeHelp howWeHelp = howWeHelpRepository.findById(id).orElseThrow(
                 () -> new HowWeHelpNotFoundException("How we help  not found Id : " + id));
 
@@ -53,8 +49,6 @@ public class HowWeHelpService {
         howWeHelp.setRuDescription(howWeHelpRequestDto.getRuDescription());
 
         howWeHelpRepository.save(howWeHelp);
-
-        return "HowWeHelp  updated successfully";
     }
 
     public List<HowWeHelpResponseDto> getHowWeHelp(String lang) {
@@ -63,6 +57,21 @@ public class HowWeHelpService {
                         howWeHelp.getId(),
                         howWeHelp.getAboutUsTitle(lang),
                         howWeHelp.getAboutUsDescription(lang)
+                ))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<HowWeHelp> getAll() {
+        return howWeHelpRepository.findAll().stream()
+                .map(howWeHelp -> new HowWeHelp(
+                        howWeHelp.getId(),
+                        howWeHelp.getAzTitle(),
+                        howWeHelp.getAzDescription(),
+                        howWeHelp.getEnTitle(),
+                        howWeHelp.getEnDescription(),
+                        howWeHelp.getRuTitle(),
+                        howWeHelp.getRuDescription()
                 ))
                 .collect(Collectors.toList());
     }

@@ -18,11 +18,23 @@ public class VideoGalleryController {
     private final VideoGalleryService videoGalleryService;
 
     @PostMapping
-    public ResponseEntity<VideoGalleryResponseDto> addedVideoUrl(@RequestBody VideoGalleryRequestDto videoGalleryRequestDto) {
-        VideoGalleryResponseDto responseDto = videoGalleryService.addVideoUrl(videoGalleryRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    public ResponseEntity<Void> addedVideoUrl(@RequestBody VideoGalleryRequestDto videoGalleryRequestDto) {
+       videoGalleryService.addVideoUrl(videoGalleryRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updatedVideoUrl(@PathVariable Long id,
+                                                @RequestBody VideoGalleryRequestDto videoGalleryRequestDto) {
+        videoGalleryService.updateVideoUrl(id,videoGalleryRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VideoGalleryResponseDto> getVideoUrlById(@PathVariable Long id) {
+        VideoGalleryResponseDto response = videoGalleryService.getVideoUrlById(id);
+        return new ResponseEntity<>(response ,HttpStatus.OK);
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<VideoGalleryResponseDto>> getAllVideos() {

@@ -1,6 +1,7 @@
 package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.PhotoGalleryRequestDto;
+import az.innakhchivan.dto.response.ImageResponseDto;
 import az.innakhchivan.dto.response.PhotoGalleryResponseDto;
 import az.innakhchivan.service.PhotoGalleryService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,21 @@ public class PhotoGalleryController {
     private final PhotoGalleryService photoGalleryService;
 
     @PostMapping
-    public ResponseEntity<PhotoGalleryResponseDto>  addImageUrl(PhotoGalleryRequestDto photoGalleryRequestDto) {
-       PhotoGalleryResponseDto responseDto =  photoGalleryService.addImageUrl(photoGalleryRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    public ResponseEntity<Void>  addImageUrl(@RequestBody PhotoGalleryRequestDto photoGalleryRequestDto) {
+       photoGalleryService.addImageUrl(photoGalleryRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void>  updatedImageUrl(@PathVariable Long id,  @RequestBody PhotoGalleryRequestDto photoGalleryRequestDto) {
+        photoGalleryService.updateImageUrl(id, photoGalleryRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PhotoGalleryResponseDto> getImageUrlById(@PathVariable Long id) {
+        PhotoGalleryResponseDto responseDto = photoGalleryService.getPhotoGalleryById(id);
+        return new ResponseEntity<>(responseDto ,HttpStatus.OK);
     }
 
     @GetMapping("/all")

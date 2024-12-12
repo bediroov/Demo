@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
-    public QuestionResponseDto createQuestion(QuestionRequestDto questionRequestDto) {
+    public void createQuestion(QuestionRequestDto questionRequestDto) {
 
         Question question = new Question();
 
@@ -28,13 +28,9 @@ public class QuestionService {
         question.setRuDescription(questionRequestDto.getRuDescription());
 
         questionRepository.save(question);
-
-        return QuestionResponseDto.builder()
-                .id(question.getId())
-                .build();
     }
 
-    public String updateQuestion(Long id, QuestionRequestDto questionRequestDto) {
+    public void updateQuestion(Long id, QuestionRequestDto questionRequestDto) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException("Question not found Id : " + id));
 
@@ -48,8 +44,6 @@ public class QuestionService {
         question.setRuDescription(questionRequestDto.getRuDescription());
 
         questionRepository.save(question);
-
-        return "Question update succesfully ";
     }
 
 
@@ -59,6 +53,20 @@ public class QuestionService {
                         question.getId(),
                         question.getQuestionTitle(lang),
                         question.getQuestionDescription(lang)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<Question> getAll() {
+        return questionRepository.findAll().stream()
+                .map(question -> new Question(
+                        question.getId(),
+                        question.getAzTitle(),
+                        question.getAzDescription(),
+                        question.getEnTitle(),
+                        question.getEnDescription(),
+                        question.getRuTitle(),
+                        question.getRuDescription()
                 ))
                 .collect(Collectors.toList());
     }

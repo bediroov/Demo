@@ -17,10 +17,18 @@ public class ContactController {
     private final ContactService contactService;
 
     @PostMapping
-    public ResponseEntity<String> created(@RequestBody ContactRequestDto contactRequestDto) {
-        String contactResponseDto = contactService.createContact(contactRequestDto);
-        return new ResponseEntity<>(contactResponseDto, HttpStatus.CREATED);
+    public ResponseEntity<Void> created(@RequestBody ContactRequestDto contactRequestDto) {
+     contactService.createContact(contactRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updated(@PathVariable Long id, @RequestBody ContactRequestDto contactRequestDto) {
+        contactService.updateContact(id, contactRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<ContactResponseDto>> getAll() {

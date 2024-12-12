@@ -2,6 +2,7 @@ package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.NewsRequestDto;
 import az.innakhchivan.dto.response.NewsResponseDto;
+import az.innakhchivan.entity.News;
 import az.innakhchivan.service.NewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,24 +21,31 @@ public class NewsController {
     private final NewsService newsService;
 
     @PostMapping
-    public ResponseEntity<NewsResponseDto> addedNews(@Valid @RequestBody NewsRequestDto newsRequestDto) throws IOException {
+    public ResponseEntity<Void> addedNews(@Valid @RequestBody NewsRequestDto newsRequestDto) throws IOException {
 
-        NewsResponseDto responseDto = newsService.addNews(newsRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        newsService.addNews(newsRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<NewsResponseDto>> getAllNews( @RequestParam(required = false, defaultValue = "az") String lang) {
 
         List<NewsResponseDto> newsList = newsService.getAllNews(lang);
         return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<News>> getAll() {
+
+        List<News> newsList = newsService.getAll();
+        return new ResponseEntity<>(newsList, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatedNews(@PathVariable Long id, @Valid @RequestBody NewsRequestDto newsRequestDto) {
-        String responseDto = newsService.updateNews(id, newsRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    public ResponseEntity<Void> updatedNews(@PathVariable Long id, @Valid @RequestBody NewsRequestDto newsRequestDto) {
+        newsService.updateNews(id, newsRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

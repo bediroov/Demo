@@ -2,7 +2,9 @@ package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.WhyNakhinvestRequestDto;
 import az.innakhchivan.dto.response.SectorResponseDto;
+import az.innakhchivan.dto.response.WhyNakhinvestResponse;
 import az.innakhchivan.dto.response.WhyNakhinvestResponseDto;
+import az.innakhchivan.entity.WhyNakhinvest;
 import az.innakhchivan.service.WhyNakhinvestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,18 +20,24 @@ public class WhyNakhinvestController {
     private final WhyNakhinvestService whyNakhinvestService;
 
     @PostMapping
-    public ResponseEntity<WhyNakhinvestResponseDto> created(@RequestBody WhyNakhinvestRequestDto requestDto) {
-        WhyNakhinvestResponseDto responseDto = whyNakhinvestService.createNakhinvest(requestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    public ResponseEntity<Void> created(@RequestBody WhyNakhinvestRequestDto requestDto) {
+          whyNakhinvestService.createNakhinvest(requestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updated(@PathVariable Long id, @RequestBody WhyNakhinvestRequestDto requestDto) {
-        String responseDto = whyNakhinvestService.updateNakhinvest(id, requestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    public ResponseEntity<Void> updated(@PathVariable Long id, @RequestBody WhyNakhinvestRequestDto requestDto) {
+      whyNakhinvestService.updateNakhinvest(id, requestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/{id}")
+    public ResponseEntity<WhyNakhinvestResponse> getWhyNakhinvestById(@PathVariable Long id) {
+        WhyNakhinvestResponse newsList = whyNakhinvestService.getWhyNakhinvestById(id);
+        return new ResponseEntity<>(newsList, HttpStatus.OK);
+    }
+
+    @GetMapping
     public ResponseEntity<List<WhyNakhinvestResponseDto>> getAllWhyNakhinvest(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<WhyNakhinvestResponseDto> newsList = whyNakhinvestService.getAllNakhinvest(lang);
         return new ResponseEntity<>(newsList, HttpStatus.OK);
@@ -39,6 +47,13 @@ public class WhyNakhinvestController {
     public ResponseEntity<Void> deletedNkhinvest(@PathVariable Long id) {
         whyNakhinvestService.deletedNakhinvest(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<List<WhyNakhinvestResponse>> getAll() {
+        List<WhyNakhinvestResponse> responseList = whyNakhinvestService.getAll();
+        return new ResponseEntity<>(responseList,HttpStatus.OK);
     }
 
 }

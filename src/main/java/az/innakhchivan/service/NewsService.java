@@ -2,9 +2,11 @@ package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.NewsRequestDto;
 import az.innakhchivan.dto.response.NewsResponseDto;
+import az.innakhchivan.entity.BaseEntity;
 import az.innakhchivan.entity.News;
 import az.innakhchivan.exception.NewsNotFoundException;
 import az.innakhchivan.repository.NewsRepository;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
-    public NewsResponseDto addNews(NewsRequestDto newsDto) throws IOException {
+    public void addNews(NewsRequestDto newsDto) throws IOException {
 
         News news = new News();
         news.setAzTitle(newsDto.getAzTitle());
@@ -31,14 +33,10 @@ public class NewsService {
         news.setImageUrl(newsDto.getImageUrl());
 
         newsRepository.save(news);
-
-        return NewsResponseDto.builder()
-                .id(news.getId())
-                .build();
     }
 
 
-    public String updateNews(Long id, NewsRequestDto newsDto) {
+    public void updateNews(Long id, NewsRequestDto newsDto) {
            News news = newsRepository.findById(id).orElseThrow(
                 () -> new NewsNotFoundException("News not found with id: " + id)
         );
@@ -54,9 +52,6 @@ public class NewsService {
 
 
         newsRepository.save(news);
-
-
-        return "News updated successfully ";
     }
 
     public List<NewsResponseDto> getAllNews(String lang) {
@@ -71,6 +66,26 @@ public class NewsService {
                 )
                 .collect(Collectors.toList());
     }
+
+
+    public List<News> getAll() {
+        return newsRepository.findAll().stream()
+                .map(news -> new News(
+                        news.getId(),
+                        news.getAzTitle(),
+                        news.getAzDescription(),
+                        news.getEnTitle(),
+                        news.getEnDescription(),
+                        news.getRuTitle(),
+                        news.getRuDescription(),
+                        news.getImageUrl(),
+                        news.getOptional(),
+                        news.getCreatedAt(),
+                        news.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
     public void deleteNews(Long Id) {
         News news = newsRepository.findById(Id).orElseThrow(

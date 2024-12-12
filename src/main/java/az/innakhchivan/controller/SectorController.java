@@ -1,7 +1,9 @@
 package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.SectorRequestDto;
+import az.innakhchivan.dto.response.SectorResponse;
 import az.innakhchivan.dto.response.SectorResponseDto;
+import az.innakhchivan.entity.Sector;
 import az.innakhchivan.service.SectorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +21,29 @@ public class SectorController {
     private final SectorService sectorService;
 
     @PostMapping
-    public ResponseEntity<SectorResponseDto> addSector(@Valid @RequestBody SectorRequestDto sectorRequestDto) {
-        SectorResponseDto responseDto = sectorService.addSector(sectorRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    public ResponseEntity<Void> addSector(@Valid @RequestBody SectorRequestDto sectorRequestDto) {
+        sectorService.addSector(sectorRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<SectorResponseDto>> getAllSectors(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<SectorResponseDto> newsList = sectorService.getAllSector(lang);
         return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
+
+    @GetMapping("/all")
+    public ResponseEntity<List<SectorResponse>> getAll() {
+        List<SectorResponse> newsList = sectorService.getAll();
+        return new ResponseEntity<>(newsList, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateSector(@PathVariable Long id,
+    public ResponseEntity<Void> updateSector(@PathVariable Long id,
                                                           @Valid @RequestBody SectorRequestDto sectorRequestDto) {
-        String responseDto = sectorService.updateSector(id, sectorRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+      sectorService.updateSector(id, sectorRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,7 @@ package az.innakhchivan.controller;
 
 import az.innakhchivan.dto.request.AboutRequestDto;
 import az.innakhchivan.dto.response.AboutResponseDto;
+import az.innakhchivan.entity.AboutUs;
 import az.innakhchivan.service.AboutUsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,19 +19,19 @@ public class AboutUsController {
     private final AboutUsService aboutUsService;
 
     @PostMapping
-    public ResponseEntity<AboutResponseDto> createAbout(@RequestBody AboutRequestDto aboutRequestDto) {
-        AboutResponseDto created = aboutUsService.createAbout(aboutRequestDto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<Void> createAbout(@RequestBody AboutRequestDto aboutRequestDto) {
+         aboutUsService.createAbout(aboutRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{Id}")
-    public ResponseEntity<String> updateAbout(@PathVariable Long Id,
+    public ResponseEntity<Void> updateAbout(@PathVariable Long Id,
                                                         @RequestBody AboutRequestDto aboutRequestDto) {
-        String responseDto = aboutUsService.updateAbout(Id, aboutRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        aboutUsService.updateAbout(Id, aboutRequestDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<AboutResponseDto>> getAbout(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<AboutResponseDto> aboutResponseDto = aboutUsService.getAbout(lang);
         return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
@@ -40,6 +41,12 @@ public class AboutUsController {
     public ResponseEntity<Void> deleted(@PathVariable Long Id) {
         aboutUsService.deletedAbout(Id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AboutUs>> getAllAbout() {
+        List<AboutUs> aboutResponseDto = aboutUsService.getAllAbout();
+        return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
     }
 
 }
