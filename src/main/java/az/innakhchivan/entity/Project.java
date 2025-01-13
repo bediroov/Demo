@@ -2,7 +2,6 @@
 package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,31 +22,21 @@ public class Project extends BaseEntity {
     private Long id;
 
     private String azTitle;
+    @Column(columnDefinition = "TEXT")
     private String azDescription;
 
     private String enTitle;
+    @Column(columnDefinition = "TEXT")
     private String enDescription;
 
     private String ruTitle;
+    @Column(columnDefinition = "TEXT")
     private String ruDescription;
     private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    public Project(Long id, String azTitle, String azDescription, String enTitle, String enDescription, String ruTitle, String ruDescription, String imageUrl, Category category, LocalDate createdAt) {
-        this.id = id;
-        this.azTitle = azTitle;
-        this.azDescription = azDescription;
-        this.enTitle = enTitle;
-        this.enDescription = enDescription;
-        this.ruTitle = ruTitle;
-        this.ruDescription = ruDescription;
-        this.imageUrl = imageUrl;
-        this.category = category;
-        this.setCreatedAt(createdAt);
-    }
 
     public String getProjectTitle(String lang) {
         return switch (lang) {

@@ -23,7 +23,7 @@ public class VideoGalleryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updatedVideoUrl(@PathVariable Long id,
                                                 @RequestBody VideoGalleryRequestDto videoGalleryRequestDto) {
         videoGalleryService.updateVideoUrl(id,videoGalleryRequestDto);

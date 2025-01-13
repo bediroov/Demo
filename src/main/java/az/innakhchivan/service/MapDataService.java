@@ -9,7 +9,6 @@ import az.innakhchivan.entity.Region;
 import az.innakhchivan.exception.MapDataNotFoundException;
 import az.innakhchivan.exception.RegionNotFoundException;
 import az.innakhchivan.repository.MapDataRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +96,7 @@ public class MapDataService {
 
 
     public List<MapDataResponseDto> getAllMapData(String lang) {
-        return mapDataRepository.findAll().stream()
+        return mapDataRepository.findAllByOrderByIdAsc().stream()
                 .map(mapData -> new MapDataResponseDto(
                         mapData.getId(),
                         mapData.getLocation(),
@@ -136,7 +135,6 @@ public class MapDataService {
     }
 
 
-
     public List<MapDataResponseDto> getMapDataByRegionUniqueKey(String uniqueKey, String lang) {
         Region region = regionService.getRegionByUniqueKey(uniqueKey);
 
@@ -157,7 +155,6 @@ public class MapDataService {
                 ))
                 .collect(Collectors.toList());
     }
-
 
 
     public void deleteMapData(Long id) {

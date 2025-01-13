@@ -41,7 +41,7 @@ public class ContactService {
 
 
     public List<ContactResponseDto> getContactsAll() {
-        return contactRepository.findAll().stream()
+        return contactRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new ContactResponseDto(
                         x.getId(),
                         x.getName(),

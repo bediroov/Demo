@@ -37,37 +37,3 @@ public class BeanConfiguration implements WebMvcConfigurer {
         return source;
     }
 }
-
-
-//@EnableWebMvc
-//@Configuration
-//public class BeanConfiguration implements WebMvcConfigurer {
-//
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOrigins("*")
-//                .allowedHeaders("*")
-//                .allowedMethods(
-//                        HttpMethod.GET.name(),
-//                        HttpMethod.POST.name(),
-//                        HttpMethod.PUT.name(),
-//                        HttpMethod.DELETE.name(),
-//                        HttpMethod.HEAD.name(),
-//                        HttpMethod.PATCH.name(),
-//                        HttpMethod.OPTIONS.name()
-//                );
-//    }
-//
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("*"));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "PATCH", "OPTIONS"));
-//        configuration.setAllowedHeaders(List.of("*"));
-//        configuration.setExposedHeaders(List.of("x-auth-token"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-//}

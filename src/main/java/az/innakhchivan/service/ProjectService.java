@@ -1,8 +1,9 @@
 package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.ProjectRequestDto;
-import az.innakhchivan.dto.response.*;
-import az.innakhchivan.entity.BaseEntity;
+import az.innakhchivan.dto.response.CategoryResponseDtoForRelation;
+import az.innakhchivan.dto.response.ProjectResponse;
+import az.innakhchivan.dto.response.ProjectResponseDto;
 import az.innakhchivan.entity.Category;
 import az.innakhchivan.entity.Project;
 import az.innakhchivan.exception.CategoryNotFoundException;
@@ -11,7 +12,6 @@ import az.innakhchivan.repository.CategoryRepository;
 import az.innakhchivan.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,8 +43,8 @@ public class ProjectService {
 
     public void updateProject(Long id, ProjectRequestDto projectRequestDto) {
 
-       Project project = projectRepository.findById(id).orElseThrow(
-        ()-> new ProjectNotFoundException(String.format("Project with id %s not found", id)));
+        Project project = projectRepository.findById(id).orElseThrow(
+                () -> new ProjectNotFoundException(String.format("Project with id %s not found", id)));
 
         project.setAzTitle(projectRequestDto.getAzTitle());
         project.setAzDescription(projectRequestDto.getAzDescription());
@@ -64,7 +64,7 @@ public class ProjectService {
 
 
     public List<ProjectResponseDto> getAllProjects(String lang) {
-        return projectRepository.findAll().stream()
+        return projectRepository.findAllByOrderByIdAsc().stream()
                 .map(project -> new ProjectResponseDto(
                         project.getId(),
                         project.getProjectTitle(lang),
@@ -97,13 +97,9 @@ public class ProjectService {
     }
 
 
-
-
-
-
     public void deleteProject(Long id) {
-       Project project = projectRepository.findById(id).orElseThrow(
-                ()-> new ProjectNotFoundException(String.format("Project with id %s not found", id))
+        Project project = projectRepository.findById(id).orElseThrow(
+                () -> new ProjectNotFoundException(String.format("Project with id %s not found", id))
         );
         projectRepository.delete(project);
     }

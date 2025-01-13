@@ -2,11 +2,9 @@ package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.NewsRequestDto;
 import az.innakhchivan.dto.response.NewsResponseDto;
-import az.innakhchivan.entity.BaseEntity;
 import az.innakhchivan.entity.News;
 import az.innakhchivan.exception.NewsNotFoundException;
 import az.innakhchivan.repository.NewsRepository;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +35,7 @@ public class NewsService {
 
 
     public void updateNews(Long id, NewsRequestDto newsDto) {
-           News news = newsRepository.findById(id).orElseThrow(
+        News news = newsRepository.findById(id).orElseThrow(
                 () -> new NewsNotFoundException("News not found with id: " + id)
         );
 
@@ -55,7 +53,7 @@ public class NewsService {
     }
 
     public List<NewsResponseDto> getAllNews(String lang) {
-        return newsRepository.findAll().stream()
+        return newsRepository.findAllByOrderByIdAsc().stream()
                 .map(news -> new NewsResponseDto(
                         news.getId(),
                         news.getNewsTitle(lang),
@@ -69,7 +67,7 @@ public class NewsService {
 
 
     public List<News> getAll() {
-        return newsRepository.findAll().stream()
+        return newsRepository.findAllByOrderByIdAsc().stream()
                 .map(news -> new News(
                         news.getId(),
                         news.getAzTitle(),

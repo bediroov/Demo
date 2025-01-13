@@ -15,17 +15,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ImageService {
 
-    @Value("${base.url}")
+    @Value("${base.url.image}")
     private String baseUrl;
 
     @Value("${image.upload.dir}")
     private String uploadDir;
+
+    @Value("${image.upload.max-size}")
+    private long maxFileSize;
 
     public ImageResponseDto uploadImage(MultipartFile imageFile) {
         try {
             // Validate file
             if (imageFile.getOriginalFilename() == null || imageFile.isEmpty()) {
                 throw new IllegalArgumentException("File is missing or invalid");
+            }
+
+            // Validate file size
+            if (imageFile.getSize() > maxFileSize) {
+                throw new IllegalArgumentException("File size exceeds the maximum allowed limit of " + (maxFileSize / (1024 * 1024)) + " MB");
             }
 
             // Ensure the upload directory exists
@@ -60,5 +68,4 @@ public class ImageService {
             throw new IllegalArgumentException("Invalid file input: " + e.getMessage(), e);
         }
     }
-
 }

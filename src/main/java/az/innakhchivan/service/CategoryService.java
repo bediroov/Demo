@@ -10,7 +10,6 @@ import az.innakhchivan.entity.Sector;
 import az.innakhchivan.exception.CategoryNotFoundException;
 import az.innakhchivan.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,18 +30,26 @@ public class CategoryService {
     }
 
 
-    public void updateCategory(Long id,  CategoryRequestdDto categoryRequest) {
-        Category category =categoryRepository.findById(id).orElseThrow(
+    public void updateCategory(Long id, CategoryRequestdDto categoryRequest) {
+        Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CategoryNotFoundException("Category not found with id: " + id)
         );
-        category.setAzName(categoryRequest.getAzName());
-        category.setEnName(categoryRequest.getEnName());
-        category.setRuName(categoryRequest.getRuName());
+        if (categoryRequest.getAzName() != null) {
+            category.setAzName(categoryRequest.getAzName());
+        }
+        if (categoryRequest.getEnName() != null) {
+            category.setEnName(categoryRequest.getEnName());
+        }
+        if (categoryRequest.getRuName() != null) {
+            category.setRuName(categoryRequest.getRuName());
+        }
+
+
         categoryRepository.save(category);
     }
 
     public List<CategoryResponseDto> getAllCategory(String lang) {
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new CategoryResponseDto(
                         x.getId(),
                         x.getCategoryName(lang)
@@ -53,7 +60,7 @@ public class CategoryService {
 
     @Transactional
     public List<CategoryResponse> getAll() {
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAllByOrderByIdAsc().stream()
                 .map(category -> new CategoryResponse(
                         category.getId(),
                         category.getAzName(),
@@ -74,56 +81,10 @@ public class CategoryService {
 
 
     public void deleteCategory(Long id) {
-        Category category =categoryRepository.findById(id).orElseThrow(
+        Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CategoryNotFoundException("Category not found with id: " + id));
 
-                categoryRepository.delete(category);
+        categoryRepository.delete(category);
     }
-
-
-
-
-
-
-
-//    public List<Category> getAll() {
-//        return categoryRepository.findAllWithRelations().stream()
-//                .map(category -> new Category(
-//                        category.getId(),
-//                        category.getAzName(),
-//                        category.getEnName(),
-//                        category.getRuName(),
-//                        category.getEntrepreneurs() != null ? category.getEntrepreneurs().stream().toList() : List.of(),
-//                        category.getProjects() != null ? category.getProjects().stream().toList() : List.of(),
-//                        category.getSector() != null ? category.getSector().stream().toList() : List.of()
-//                ))
-//                .collect(Collectors.toList());
-//
-//    }
-
-//    public List<Category> getAll() {
-//        return categoryRepository.findAll().stream()
-//                .map(category -> {
-//                    try {
-//                        Hibernate.initialize(category.getEntrepreneurs());
-//                        Hibernate.initialize(category.getProjects());
-//                        Hibernate.initialize(category.getSector());
-//
-//                        return new Category(
-//                                category.getId(),
-//                                category.getAzName(),
-//                                category.getEnName(),
-//                                category.getRuName(),
-//                                category.getEntrepreneurs() != null ? category.getEntrepreneurs().stream().toList() : List.of(),
-//                                category.getProjects() != null ? category.getProjects().stream().toList() : List.of(),
-//                                category.getSector() != null ? category.getSector().stream().toList() : List.of()
-//                        );
-//                    } catch (Exception e) {
-//                        throw new RuntimeException("Error while fetching category data: " + e.getMessage(), e);
-//                    }
-//                })
-//                .collect(Collectors.toList());
-//    }
-
 
 }

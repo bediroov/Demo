@@ -47,7 +47,7 @@ public class VideoGalleryService {
 
 
     public List<VideoGalleryResponseDto> getAllVideos() {
-        return videoGalleryRepository.findAll().stream()
+        return videoGalleryRepository.findAllByOrderByIdAsc().stream()
                 .map(video -> new VideoGalleryResponseDto(
                         video.getId(),
                         video.getVideoUrl()

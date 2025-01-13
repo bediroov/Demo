@@ -24,7 +24,7 @@ public class IncentiveController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{Id}")
+    @PatchMapping("/{Id}")
     public ResponseEntity<Void> updateIncentive(@PathVariable Long Id,
                                                                 @RequestBody IncentiveRequestDto incentiveRequestDto) {
        incentiveService.updateIncentive(Id, incentiveRequestDto);

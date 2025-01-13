@@ -23,7 +23,7 @@ public class ReferenceController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updatedReference(@PathVariable Long id, @RequestBody ReferenceRequestDto referenceRequestDto) {
        referenceService.updateReference(id, referenceRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

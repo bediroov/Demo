@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/why-nakhinvest/")
+@RequestMapping("/api/v1/why-nakhinvest")
 @RequiredArgsConstructor
 public class WhyNakhinvestController {
     private final WhyNakhinvestService whyNakhinvestService;
@@ -25,7 +25,7 @@ public class WhyNakhinvestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updated(@PathVariable Long id, @RequestBody WhyNakhinvestRequestDto requestDto) {
       whyNakhinvestService.updateNakhinvest(id, requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -43,7 +43,7 @@ public class WhyNakhinvestController {
         return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletedNkhinvest(@PathVariable Long id) {
         whyNakhinvestService.deletedNakhinvest(id);
         return new ResponseEntity<>(HttpStatus.OK);

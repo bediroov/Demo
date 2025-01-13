@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "how_we_help")
 @Getter
@@ -20,12 +22,15 @@ public class HowWeHelp {
     private Long id;
 
     private String azTitle;
+    @Column(columnDefinition = "TEXT")
     private String azDescription;
 
     private String enTitle;
+    @Column(columnDefinition = "TEXT")
     private String enDescription;
 
     private String ruTitle;
+    @Column(columnDefinition = "TEXT")
     private String ruDescription;
 
 

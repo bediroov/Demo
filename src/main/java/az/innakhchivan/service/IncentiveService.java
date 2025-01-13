@@ -2,7 +2,6 @@ package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.IncentiveRequestDto;
 import az.innakhchivan.dto.response.IncentiveResponseDto;
-import az.innakhchivan.dto.response.QuestionResponseDto;
 import az.innakhchivan.entity.Incentive;
 import az.innakhchivan.exception.IncentiveNotFoundException;
 import az.innakhchivan.repository.IncentiveRepository;
@@ -32,7 +31,7 @@ public class IncentiveService {
     }
 
     public void updateIncentive(Long id, IncentiveRequestDto incentiveRequestDto) {
-       Incentive incentive = incentiveRepository.findById(id).orElseThrow(
+        Incentive incentive = incentiveRepository.findById(id).orElseThrow(
                 () -> new IncentiveNotFoundException("Incentive not found Id : " + id));
 
         incentive.setAzTitle(incentiveRequestDto.getAzTitle());
@@ -46,7 +45,7 @@ public class IncentiveService {
     }
 
     public List<IncentiveResponseDto> getIncentiveAll(String lang) {
-        return incentiveRepository.findAll().stream()
+        return incentiveRepository.findAllByOrderByIdAsc().stream()
                 .map(incentive -> new IncentiveResponseDto(
                         incentive.getId(),
                         incentive.getIncentiveTitle(lang),
@@ -57,7 +56,7 @@ public class IncentiveService {
 
 
     public List<Incentive> getAll() {
-        return incentiveRepository.findAll().stream()
+        return incentiveRepository.findAllByOrderByIdAsc().stream()
                 .map(incentive -> new Incentive(
                         incentive.getId(),
                         incentive.getAzTitle(),

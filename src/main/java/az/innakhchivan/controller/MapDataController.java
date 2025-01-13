@@ -24,7 +24,7 @@ public class MapDataController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updatedMapData(@PathVariable Long id,
                                                  @RequestBody MapDataRequestDto mapDataRequestDto) {
 
@@ -32,7 +32,7 @@ public class MapDataController {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MapDataResponseDto> getMapDataById(@PathVariable Long id, @RequestParam(required = false, defaultValue = "az") String lang) {
         MapDataResponseDto mapData = mapDataService.getMapDataById(id, lang);
         return new ResponseEntity<>(mapData, HttpStatus.OK);

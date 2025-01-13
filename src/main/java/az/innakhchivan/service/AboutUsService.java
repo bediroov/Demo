@@ -48,7 +48,7 @@ public class AboutUsService {
     }
 
     public List<AboutResponseDto> getAbout(String lang) {
-        return aboutUsRepository.findAll().stream()
+        return aboutUsRepository.findAllByOrderByIdAsc().stream()
                 .map(aboutUs -> new AboutResponseDto(
                         aboutUs.getId(),
                         aboutUs.getAboutUsTitle(lang),
@@ -68,7 +68,7 @@ public class AboutUsService {
     }
 
     public List<AboutUs> getAllAbout() {
-        return aboutUsRepository.findAll().stream()
+        return aboutUsRepository.findAllByOrderByIdAsc().stream()
                 .map(aboutUs -> new AboutUs(
                         aboutUs.getId(),
                         aboutUs.getAzTitle(),

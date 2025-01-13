@@ -48,7 +48,7 @@ public class QuestionService {
 
 
     public List<QuestionResponseDto> getQuestionAll(String lang) {
-        return questionRepository.findAll().stream()
+        return questionRepository.findAllByOrderByIdAsc().stream()
                 .map(question -> new QuestionResponseDto(
                         question.getId(),
                         question.getQuestionTitle(lang),
@@ -58,7 +58,7 @@ public class QuestionService {
     }
 
     public List<Question> getAll() {
-        return questionRepository.findAll().stream()
+        return questionRepository.findAllByOrderByIdAsc().stream()
                 .map(question -> new Question(
                         question.getId(),
                         question.getAzTitle(),

@@ -3,6 +3,8 @@ package az.innakhchivan.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "nakhinvest")
 @Getter
@@ -17,12 +19,15 @@ public class WhyNakhinvest {
     private Long id;
 
     private String azTitle;
+    @Column(columnDefinition = "TEXT")
     private String azDescription;
 
     private String enTitle;
+    @Column(columnDefinition = "TEXT")
     private String enDescription;
 
     private String ruTitle;
+    @Column(columnDefinition = "TEXT")
     private String ruDescription;
     private String imageUrl;
 

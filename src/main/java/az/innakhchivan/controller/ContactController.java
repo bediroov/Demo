@@ -23,7 +23,7 @@ public class ContactController {
     }
 
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updated(@PathVariable Long id, @RequestBody ContactRequestDto contactRequestDto) {
         contactService.updateContact(id, contactRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

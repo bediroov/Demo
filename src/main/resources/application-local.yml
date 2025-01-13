@@ -24,6 +24,20 @@ spring:
       max-file-size: 5MB
       max-request-size: 20MB
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:nakhinvest@gmail.com}
+    password: ${MAIL_PASSWORD:psrjgvmijljpmiue}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
+
 
 logging:
   level:
@@ -35,11 +49,20 @@ server:
 
 jwt:
   key: cn5N5rbQ1ruPW7ZEbjV6XMToIHyhG9KgHbvZedQahvjqqU3Kv9tv8X6gK289IXVXHUSVhKbjCgyny0SVOBOSg==
-  access-token-expiration: 300000
-  refresh-token-expiration: 18000000
+  access-token-expiration: 900_000
+
 image:
   upload:
     dir: C:/Users/nihada/images
+    max-size: 10485760 # 10
+
+pdf:
+  upload:
+    dir: C:/Users/nihada/pdf
+    max-size: 10485760 # 10 M
+
 
 base:
-  url: http://localhost:8081
+  url:
+    image: https://nakhinvest.az
+    pdf: https://admin.nakhinvest.az

@@ -8,4 +8,5 @@ import lombok.Setter;
 public class ReferenceRequestDto {
     private String name;
     private String iconUrl;
+    private String url;
 }

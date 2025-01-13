@@ -24,7 +24,7 @@ public class RegionController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/deactivate/{uniqueKey}")
+    @PostMapping("/deactivate/{uniqueKey}")
     public ResponseEntity<Void> deactivateRegion(@PathVariable String  uniqueKey) {
         regionService.deactivateRegion(uniqueKey);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -46,6 +46,12 @@ public class RegionController {
     public ResponseEntity<List<RegionResponseDto>> getAll() {
         List<RegionResponseDto> responseDtos = regionService.getAllRegionsWithMapData();
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{uniqueKey}")
+    public ResponseEntity<Void> deletedRegion(@PathVariable String uniqueKey) {
+        regionService.deleteRegion(uniqueKey);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

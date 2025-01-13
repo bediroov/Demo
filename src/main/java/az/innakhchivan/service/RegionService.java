@@ -55,7 +55,7 @@ public class RegionService {
     }
 
     public List<RegionResponse> getAllRegions(String lang) {
-        return regionRepository.findAll().stream()
+        return regionRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new RegionResponse(
                         x.getId(),
                         x.getUniqueKey(),
@@ -81,5 +81,11 @@ public class RegionService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteRegion(String uniqueKey) {
+        Region region = regionRepository.findByUniqueKey(uniqueKey).orElseThrow(
+                () -> new RegionNotFoundException("Region not found with unique key: " + uniqueKey)
+        );
+        regionRepository.delete(region);
+    }
 
 }

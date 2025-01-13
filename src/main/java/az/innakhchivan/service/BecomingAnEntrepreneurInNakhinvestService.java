@@ -1,7 +1,9 @@
 package az.innakhchivan.service;
 
 import az.innakhchivan.dto.request.BecomingAnEntrepreneurInNakhinvestRequestDto;
-import az.innakhchivan.dto.response.*;
+import az.innakhchivan.dto.response.BecomingAnEntrepreneurInNakhinvestResponseDto;
+import az.innakhchivan.dto.response.CategoryResponseDtoForRelation;
+import az.innakhchivan.dto.response.EntrepreneurInNakhinvestResponse;
 import az.innakhchivan.entity.BecomingAnEntrepreneurInNakhinvest;
 import az.innakhchivan.entity.Category;
 import az.innakhchivan.exception.BecomingAnEntrepreneurInNakhinvestNotFoundException;
@@ -60,7 +62,7 @@ public class BecomingAnEntrepreneurInNakhinvestService {
     }
 
     public List<BecomingAnEntrepreneurInNakhinvestResponseDto> getEntrepreneurAll(String lang) {
-        return becomingAnEntrepreneurInNakhinvestRepository.findAll().stream()
+        return becomingAnEntrepreneurInNakhinvestRepository.findAllByOrderByIdAsc().stream()
                 .map(entrepreneur -> new BecomingAnEntrepreneurInNakhinvestResponseDto(
                         entrepreneur.getId(),
                         entrepreneur.getEntrepreneurTitle(lang),

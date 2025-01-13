@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.LazyInitializationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -49,6 +51,32 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ContactNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleContactNotFoundException(ContactNotFoundException ex,
+                                                                            HttpServletRequest request) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(NOT_FOUND.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    @ExceptionHandler(PdfProcessingException.class)
+    public ResponseEntity<ExceptionResponse> handlePdfProcessingException(PdfProcessingException ex,
+                                                                            HttpServletRequest request) {
+        return ResponseEntity.status(PROCESSING)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(PROCESSING.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    @ExceptionHandler(SubmitProjectNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleSubmitProjectNotFoundException(SubmitProjectNotFoundException ex,
                                                                             HttpServletRequest request) {
         return ResponseEntity.status(NOT_FOUND)
                 .body(ExceptionResponse.builder()
@@ -164,7 +192,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RegionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleRegionNotFoundException(RegionNotFoundException ex,
-                                                                         HttpServletRequest request) {
+                                                                           HttpServletRequest request) {
         return ResponseEntity.status(NOT_FOUND)
                 .body(ExceptionResponse.builder()
                         .message(ex.getMessage())
@@ -292,7 +320,6 @@ public class GlobalExceptionHandler {
     }
 
 
-
     @ExceptionHandler(PartnerReviewNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handlePartnerReviewNotFoundException(PartnerReviewNotFoundException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -326,6 +353,41 @@ public class GlobalExceptionHandler {
                         .path(request.getRequestURI())
                         .timeStamp(LocalDateTime.now())
                         .build());
+    }
+
+
+    //AccessDeniedException
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(UNAUTHORIZED.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    //UsernameNotFoundException
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
+        return ResponseEntity.status(NOT_FOUND)
+                .body(ExceptionResponse.builder()
+                        .message(ex.getMessage())
+                        .statusCode(NOT_FOUND.value())
+                        .path(request.getRequestURI())
+                        .timeStamp(LocalDateTime.now())
+                        .build());
+    }
+
+
+    @ExceptionHandler(io.jsonwebtoken.ExpiredJwtException.class)
+    public ResponseEntity<Map<String, String>> handleExpiredJwtException(io.jsonwebtoken.ExpiredJwtException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error", "TokenExpired");
+        response.put("message", "JWT token has expired");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
 }

@@ -17,10 +17,10 @@ public class ReferenceService {
     private final ReferenceRepository referenceRepository;
 
     public void create(ReferenceRequestDto referenceRequestDto) {
-
         Reference reference = new Reference();
         reference.setName(referenceRequestDto.getName());
         reference.setImageUrl(referenceRequestDto.getIconUrl());
+        reference.setUrl(referenceRequestDto.getUrl());
         referenceRepository.save(reference);
     }
 
@@ -32,6 +32,7 @@ public class ReferenceService {
 
         reference.setName(referenceRequestDto.getName());
         reference.setImageUrl(referenceRequestDto.getIconUrl());
+        reference.setUrl(referenceRequestDto.getUrl());
         referenceRepository.save(reference);
     }
 
@@ -43,16 +44,18 @@ public class ReferenceService {
                 .id(reference.getId())
                 .name(reference.getName())
                 .iconUrl(reference.getImageUrl())
+                .url(reference.getUrl())
                 .build();
     }
 
 
     public List<ReferenceResponseDto> getAllReferences() {
-        return referenceRepository.findAll().stream()
+        return referenceRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new ReferenceResponseDto(
                         x.getId(),
                         x.getName(),
-                        x.getImageUrl()
+                        x.getImageUrl(),
+                        x.getUrl()
                 ))
                 .collect(Collectors.toList());
     }

@@ -24,7 +24,7 @@ public class AboutUsController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{Id}")
+    @PatchMapping("/{Id}")
     public ResponseEntity<Void> updateAbout(@PathVariable Long Id,
                                                         @RequestBody AboutRequestDto aboutRequestDto) {
         aboutUsService.updateAbout(Id, aboutRequestDto);

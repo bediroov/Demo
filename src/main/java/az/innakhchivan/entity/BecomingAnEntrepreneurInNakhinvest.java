@@ -10,19 +10,22 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BecomingAnEntrepreneurInNakhinvest{
+public class BecomingAnEntrepreneurInNakhinvest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String azTitle;
+    @Column(columnDefinition = "TEXT")
     private String azDescription;
 
     private String enTitle;
+    @Column(columnDefinition = "TEXT")
     private String enDescription;
 
     private String ruTitle;
+    @Column(columnDefinition = "TEXT")
     private String ruDescription;
     private String iconUrl;
 

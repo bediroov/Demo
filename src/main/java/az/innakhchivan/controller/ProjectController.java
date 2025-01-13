@@ -24,7 +24,7 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateProject(@PathVariable Long id,
                                               @RequestBody ProjectRequestDto projectRequestDto) {
         projectService.updateProject(id, projectRequestDto);

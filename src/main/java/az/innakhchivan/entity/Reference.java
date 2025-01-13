@@ -2,6 +2,7 @@ package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.URL;
 
 @Entity
 @Table
@@ -17,6 +18,7 @@ public class Reference {
     private Long id;
 
     private String name;
-
     private String imageUrl;
+    @URL
+    private String url;
 }

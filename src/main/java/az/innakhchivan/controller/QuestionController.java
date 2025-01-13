@@ -23,7 +23,7 @@ private final QuestionService questionService;
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{Id}")
+    @PatchMapping("/{Id}")
     public ResponseEntity<Void> updateQuestion(@PathVariable Long Id,
                                                @RequestBody QuestionRequestDto questionRequestDto) {
         questionService.updateQuestion(Id, questionRequestDto);

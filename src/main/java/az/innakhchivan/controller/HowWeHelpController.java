@@ -24,7 +24,7 @@ public class HowWeHelpController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{Id}")
+    @PatchMapping("/{Id}")
     public ResponseEntity<Void> updated(@PathVariable Long Id,
                                           @RequestBody HowWeHelpRequestDto howWeHelpRequestDto) {
        howWeHelpService.update(Id, howWeHelpRequestDto);

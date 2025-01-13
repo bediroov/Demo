@@ -1,11 +1,8 @@
 package az.innakhchivan.service;
 
-import az.innakhchivan.dto.request.AboutRequestDto;
 import az.innakhchivan.dto.request.WhoAreWeRequestDto;
-import az.innakhchivan.dto.response.AboutResponseDto;
 import az.innakhchivan.dto.response.WhoAreWeResponse;
 import az.innakhchivan.dto.response.WhoAreWeResponseDto;
-import az.innakhchivan.entity.AboutUs;
 import az.innakhchivan.entity.WhoAreWe;
 import az.innakhchivan.exception.AboutUsNotFoundException;
 import az.innakhchivan.exception.WhoAreWeUsNotFoundException;
@@ -53,21 +50,20 @@ public class WhoAreWeService {
         WhoAreWe whoAreWe = whoAreWeRepository.findById(id).orElseThrow(
                 () -> new AboutUsNotFoundException("WhoAreWe not found Id : " + id));
 
-       return WhoAreWeResponse.builder()
-               .id(whoAreWe.getId())
-               .azTitle(whoAreWe.getAzTitle())
-               .azDescription(whoAreWe.getAzDescription())
-               .enTitle(whoAreWe.getEnTitle())
-               .enDescription(whoAreWe.getEnDescription())
-               .ruTitle(whoAreWe.getRuTitle())
-               .ruDescription(whoAreWe.getRuDescription())
-               .build();
+        return WhoAreWeResponse.builder()
+                .id(whoAreWe.getId())
+                .azTitle(whoAreWe.getAzTitle())
+                .azDescription(whoAreWe.getAzDescription())
+                .enTitle(whoAreWe.getEnTitle())
+                .enDescription(whoAreWe.getEnDescription())
+                .ruTitle(whoAreWe.getRuTitle())
+                .ruDescription(whoAreWe.getRuDescription())
+                .build();
     }
 
 
-
     public List<WhoAreWeResponseDto> getAllWhoAreWe(String lang) {
-        return whoAreWeRepository.findAll().stream()
+        return whoAreWeRepository.findAllByOrderByIdAsc().stream()
                 .map(whoAreWe -> new WhoAreWeResponseDto(
                         whoAreWe.getId(),
                         whoAreWe.getWhoAreWeTitle(lang),
@@ -78,7 +74,7 @@ public class WhoAreWeService {
 
 
     public List<WhoAreWeResponse> getAll() {
-        return whoAreWeRepository.findAll().stream()
+        return whoAreWeRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new WhoAreWeResponse(
                         x.getId(),
                         x.getAzTitle(),
@@ -90,8 +86,6 @@ public class WhoAreWeService {
                 ))
                 .collect(Collectors.toList());
     }
-
-
 
 
     public void deletedWhoAreWe(Long id) {

@@ -23,7 +23,7 @@ public class PartnerReviewController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updatedPartnerReview(@PathVariable Long id , @RequestBody PartnerReviewRequestDto partnerReviewRequestDto) {
          partnerReviewService.updatePartnerReview(id, partnerReviewRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

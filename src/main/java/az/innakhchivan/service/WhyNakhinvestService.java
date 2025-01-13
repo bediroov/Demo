@@ -70,7 +70,7 @@ public class WhyNakhinvestService {
 
 
     public List<WhyNakhinvestResponseDto> getAllNakhinvest(String lang) {
-        return whyNakhinvestRepository.findAll().stream()
+        return whyNakhinvestRepository.findAllByOrderByIdAsc().stream()
                 .map(nakhinvest -> new WhyNakhinvestResponseDto(
                         nakhinvest.getId(),
                         nakhinvest.getWhyNakhinvestTitle(lang),
@@ -88,7 +88,7 @@ public class WhyNakhinvestService {
     }
 
     public List<WhyNakhinvestResponse> getAll() {
-        return whyNakhinvestRepository.findAll().stream()
+        return whyNakhinvestRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new WhyNakhinvestResponse(
                         x.getId(),
                         x.getAzTitle(),

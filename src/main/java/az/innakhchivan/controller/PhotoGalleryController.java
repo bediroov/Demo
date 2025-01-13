@@ -23,7 +23,7 @@ public class PhotoGalleryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void>  updatedImageUrl(@PathVariable Long id,  @RequestBody PhotoGalleryRequestDto photoGalleryRequestDto) {
         photoGalleryService.updateImageUrl(id, photoGalleryRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

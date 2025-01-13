@@ -11,4 +11,5 @@ public class ReferenceResponseDto {
     private Long id;
     private String name;
     private String iconUrl;
+    private String url;
 }

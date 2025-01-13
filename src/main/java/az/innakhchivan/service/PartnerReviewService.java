@@ -25,6 +25,7 @@ public class PartnerReviewService {
         partnerReview.setEnComment(partnerReviewRequest.getEnComment());
         partnerReview.setRuPartnerName(partnerReviewRequest.getRuPartnerName());
         partnerReview.setRuComment(partnerReviewRequest.getRuComment());
+        partnerReview.setIconUrl(partnerReviewRequest.getIconUrl());
 
         partnerReviewRepository.save(partnerReview);
     }
@@ -41,6 +42,7 @@ public class PartnerReviewService {
         partner.setEnComment(partnerReviewRequest.getEnComment());
         partner.setRuPartnerName(partnerReviewRequest.getRuPartnerName());
         partner.setRuComment(partnerReviewRequest.getRuComment());
+        partner.setIconUrl(partnerReviewRequest.getIconUrl());
 
         partnerReviewRepository.save(partner);
 
@@ -66,7 +68,7 @@ public class PartnerReviewService {
     }
 
     public List<PartnerReviewResponseDto> getAllPartnerReviews(String lang) {
-        return partnerReviewRepository.findAll().stream()
+        return partnerReviewRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new PartnerReviewResponseDto(
                         x.getId(),
                         x.getPartnerFullName(lang),
@@ -78,7 +80,7 @@ public class PartnerReviewService {
     }
 
     public List<PartnerReview> getAll() {
-        return partnerReviewRepository.findAll().stream()
+        return partnerReviewRepository.findAllByOrderByIdAsc().stream()
                 .map(x -> new PartnerReview(
                         x.getId(),
                         x.getAzPartnerName(),

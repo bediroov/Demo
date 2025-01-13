@@ -1,8 +1,10 @@
 package az.innakhchivan.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "questions")
@@ -16,12 +18,15 @@ public class Question {
     private Long id;
 
     private String azTitle;
+    @Column(columnDefinition = "TEXT")
     private String azDescription;
 
     private String enTitle;
+    @Column(columnDefinition = "TEXT")
     private String enDescription;
 
     private String ruTitle;
+    @Column(columnDefinition = "TEXT")
     private String ruDescription;
 
     public String getQuestionTitle(String lang) {

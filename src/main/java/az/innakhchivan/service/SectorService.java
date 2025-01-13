@@ -4,9 +4,7 @@ import az.innakhchivan.dto.request.SectorRequestDto;
 import az.innakhchivan.dto.response.CategoryResponseDtoForRelation;
 import az.innakhchivan.dto.response.SectorResponse;
 import az.innakhchivan.dto.response.SectorResponseDto;
-import az.innakhchivan.entity.BecomingAnEntrepreneurInNakhinvest;
 import az.innakhchivan.entity.Category;
-import az.innakhchivan.entity.News;
 import az.innakhchivan.entity.Sector;
 import az.innakhchivan.exception.CategoryNotFoundException;
 import az.innakhchivan.exception.SectorNotFoundException;
@@ -62,7 +60,7 @@ public class SectorService {
 
     public List<SectorResponseDto> getAllSector(String lang) {
 
-        return sectorRepository.findAll().stream()
+        return sectorRepository.findAllByOrderByIdAsc().stream()
                 .map(sector -> new SectorResponseDto(
                         sector.getId(),
                         sector.getCategory().getCategoryName(lang),
@@ -87,7 +85,6 @@ public class SectorService {
                 ))
                 .collect(Collectors.toList());
     }
-
 
 
     public void deleteSector(Long Id) {

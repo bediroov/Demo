@@ -24,7 +24,7 @@ public class WhoAreWeController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updatedWhoAreWe(@PathVariable Long id, @RequestBody WhoAreWeRequestDto whoAreWeRequestDto) {
        whoAreWeService.updateWhoAreWe(id, whoAreWeRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

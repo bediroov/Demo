@@ -48,7 +48,7 @@ public class PhotoGalleryService {
 
 
     public List<PhotoGalleryResponseDto> getAllImages() {
-        return photoGalleryRepository.findAll().stream()
+        return photoGalleryRepository.findAllByOrderByIdAsc().stream()
                 .map(image -> new PhotoGalleryResponseDto(
                         image.getId(),
                         image.getImageUrl()

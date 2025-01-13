@@ -1,14 +1,10 @@
 package az.innakhchivan.service;
 
-import az.innakhchivan.dto.request.AboutRequestDto;
 import az.innakhchivan.dto.request.HowWeHelpRequestDto;
-import az.innakhchivan.dto.response.AboutResponseDto;
 import az.innakhchivan.dto.response.HowWeHelpResponseDto;
-import az.innakhchivan.entity.AboutUs;
 import az.innakhchivan.entity.HowWeHelp;
 import az.innakhchivan.exception.AboutUsNotFoundException;
 import az.innakhchivan.exception.HowWeHelpNotFoundException;
-import az.innakhchivan.repository.AboutUsRepository;
 import az.innakhchivan.repository.HowWeHelpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +48,7 @@ public class HowWeHelpService {
     }
 
     public List<HowWeHelpResponseDto> getHowWeHelp(String lang) {
-        return howWeHelpRepository.findAll().stream()
+        return howWeHelpRepository.findAllByOrderByIdAsc().stream()
                 .map(howWeHelp -> new HowWeHelpResponseDto(
                         howWeHelp.getId(),
                         howWeHelp.getAboutUsTitle(lang),
@@ -63,7 +59,7 @@ public class HowWeHelpService {
 
 
     public List<HowWeHelp> getAll() {
-        return howWeHelpRepository.findAll().stream()
+        return howWeHelpRepository.findAllByOrderByIdAsc().stream()
                 .map(howWeHelp -> new HowWeHelp(
                         howWeHelp.getId(),
                         howWeHelp.getAzTitle(),
@@ -75,7 +71,6 @@ public class HowWeHelpService {
                 ))
                 .collect(Collectors.toList());
     }
-
 
 
     public void deletedHowWeHelp(Long id) {

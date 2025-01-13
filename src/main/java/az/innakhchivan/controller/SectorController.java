@@ -39,7 +39,7 @@ public class SectorController {
         return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateSector(@PathVariable Long id,
                                                           @Valid @RequestBody SectorRequestDto sectorRequestDto) {
       sectorService.updateSector(id, sectorRequestDto);

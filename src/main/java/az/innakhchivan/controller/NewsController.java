@@ -42,7 +42,7 @@ public class NewsController {
         return new ResponseEntity<>(newsList, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updatedNews(@PathVariable Long id, @Valid @RequestBody NewsRequestDto newsRequestDto) {
         newsService.updateNews(id, newsRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);

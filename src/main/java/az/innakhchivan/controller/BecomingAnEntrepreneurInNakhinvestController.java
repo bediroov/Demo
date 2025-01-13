@@ -27,7 +27,7 @@ public class BecomingAnEntrepreneurInNakhinvestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<Void> updateEntrepreneur(@PathVariable Long id, @Valid @RequestBody BecomingAnEntrepreneurInNakhinvestRequestDto requestDto) {
         becomingAnEntrepreneurInNakhinvestService.updateEntrepreneur(id, requestDto);
         return new ResponseEntity<>(HttpStatus.OK);
