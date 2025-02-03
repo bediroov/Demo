@@ -12,6 +12,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
+
 public class PartnerReview implements Serializable {
 
     @Id

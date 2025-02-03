@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class PartnerReviewRequestDto {
     private String azPartnerName;
     private String azComment;

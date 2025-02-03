@@ -1,0 +1,80 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://62.84.181.155:5432/nakhdb
+    username: nakhinvest
+    password: nakhinvest24
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    open-in-view: false #DB-ile is bitdikde session baglanir
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation=true
+        show_sql: false
+        dialect:  org.hibernate.dialect.PostgreSQLDialect
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:nakhinvest@gmail.com}
+    password: ${MAIL_PASSWORD:psrjgvmijljpmiue}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
+
+logging:
+  level:
+    org.springframework: info
+    org.hibernate: info
+
+server:
+  port: 8081
+  ssl:
+    enabled: true
+    key-store: /var/www/backend/keystore.p12
+    key-store-type: PKCS12
+    key-store-password: robustSoftware25
+    key-alias: tomcat
+
+
+jwt:
+  key: cKBrywEzEMXaTOCGrThJACyBQA81hqq99AcBth0rJ5k5aso8NzMJY2fWeea8bssw
+  access-token-expiration: 86400000
+
+image:
+  upload:
+    dir: /var/www/images
+    max-size: 10485760 # 10 MB
+
+pdf:
+  upload:
+    dir: /var/www/pdf
+    max-size: 10485760 # 10 MB
+
+
+base:
+  url:
+    image: https://nakhinvest.az
+    pdf: https://admin.nakhinvest.az
+
+
+
+
+
+
