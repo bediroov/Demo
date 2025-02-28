@@ -41,6 +41,13 @@ public class MapDataService {
 
         mapData.setIconUrl(mapDataRequestDto.getIconUrl());
 
+        // 🆕 Yeni sahələr əlavə edilir
+        mapData.setSettlementCount(mapDataRequestDto.getSettlementCount());
+        mapData.setVillageCount(mapDataRequestDto.getVillageCount());
+        mapData.setCityAdminArea(mapDataRequestDto.getCityAdminArea());
+        mapData.setDistanceFromBaku(mapDataRequestDto.getDistanceFromBaku());
+        mapData.setGeneralInfo(mapDataRequestDto.getGeneralInfo());
+
         // Region əlavə edin
         mapData.setRegion(regionService.getRegionByUniqueKey(mapDataRequestDto.getRegionUniqueKey()));
 
@@ -72,6 +79,12 @@ public class MapDataService {
 
         mapData.setIconUrl(mapDataRequestDto.getIconUrl());
 
+        // 🆕 Yeni sahələr yenilənir
+        mapData.setSettlementCount(mapDataRequestDto.getSettlementCount());
+        mapData.setVillageCount(mapDataRequestDto.getVillageCount());
+        mapData.setCityAdminArea(mapDataRequestDto.getCityAdminArea());
+        mapData.setDistanceFromBaku(mapDataRequestDto.getDistanceFromBaku());
+        mapData.setGeneralInfo(mapDataRequestDto.getGeneralInfo());
 
         mapData.setRegion(regionService.getRegionByUniqueKey(mapDataRequestDto.getRegionUniqueKey()));
 
@@ -97,6 +110,12 @@ public class MapDataService {
                 .title(mapData.getMapDataTitle(lang))
                 .description(mapData.getMapDataDescription(lang))
                 .iconUrl(mapData.getIconUrl())
+                // 🆕 Yeni sahələr
+                .settlementCount(mapData.getSettlementCount())
+                .villageCount(mapData.getVillageCount())
+                .cityAdminArea(mapData.getCityAdminArea())
+                .distanceFromBaku(mapData.getDistanceFromBaku())
+                .generalInfo(mapData.getGeneralInfo())
                 .build();
 
     }
@@ -112,7 +131,13 @@ public class MapDataService {
                         mapData.getAverageSalary(),
                         mapData.getMapDataTitle(lang),
                         mapData.getMapDataDescription(lang),
-                        mapData.getIconUrl()
+                        mapData.getIconUrl(),
+                        // 🆕 Yeni sahələr
+                        mapData.getSettlementCount(),
+                        mapData.getVillageCount(),
+                        mapData.getCityAdminArea(),
+                        mapData.getDistanceFromBaku(),
+                        mapData.getGeneralInfo()
                 ))
                 .collect(Collectors.toList());
     }
@@ -134,7 +159,13 @@ public class MapDataService {
                         mapData.getAverageSalary(),
                         mapData.getMapDataTitle(lang),
                         mapData.getMapDataDescription(lang),
-                        mapData.getIconUrl()
+                        mapData.getIconUrl(),
+                        // 🆕 Yeni sahələr
+                        mapData.getSettlementCount(),
+                        mapData.getVillageCount(),
+                        mapData.getCityAdminArea(),
+                        mapData.getDistanceFromBaku(),
+                        mapData.getGeneralInfo()
                 ))
                 .collect(Collectors.toList());
     }

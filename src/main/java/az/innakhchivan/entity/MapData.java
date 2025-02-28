@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Table
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class MapData {
 
     @Id
@@ -32,6 +34,26 @@ public class MapData {
     private String averageSalary;
     private Integer population;
     private String iconUrl;
+
+
+    @Column(name = "settlement_count")
+    private Integer settlementCount;
+
+    @Column(name = "village_count")
+    private Integer villageCount;
+
+    @Column(name = "city_admin_area")
+    private Integer cityAdminArea;
+
+    @Column(name = "distance_from_baku")
+    private String distanceFromBaku;
+
+    @Column(name = "general_info", columnDefinition = "TEXT")
+    private String generalInfo;
+
+
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", nullable = false)
