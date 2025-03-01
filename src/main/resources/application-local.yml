@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
     open-in-view: false #DB-ile is bitdikde session baglanir
     properties:
