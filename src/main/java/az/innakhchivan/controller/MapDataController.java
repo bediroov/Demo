@@ -5,6 +5,7 @@ import az.innakhchivan.dto.response.MapDataResponse;
 import az.innakhchivan.dto.response.MapDataResponseDto;
 import az.innakhchivan.service.MapDataService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/map-data")
 @RequiredArgsConstructor
+
+@Slf4j // 📌 Lombok log əlavə edir
+
 public class MapDataController {
     private final MapDataService mapDataService;
 
     @PostMapping
     public ResponseEntity<MapDataResponse> createdMapData(@RequestBody MapDataRequestDto requestDto) {
         MapDataResponse responseDto = mapDataService.createMapData(requestDto);
+        log.info("🔐 controler filter chain initializing...");
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+
     }
 
     @PutMapping("/{id}")
@@ -52,7 +58,7 @@ public class MapDataController {
     @GetMapping("/region/{uniqueKey}")
     public ResponseEntity<List<MapDataResponseDto>> getMapDataByRegionUniqueKey(@PathVariable String uniqueKey,
                                                                                 @RequestParam(required = false, defaultValue = "az") String lang) {
-        List<MapDataResponseDto>  responseDtoList = mapDataService.getMapDataByRegionUniqueKey(uniqueKey, lang);
+        List<MapDataResponseDto> responseDtoList = mapDataService.getMapDataByRegionUniqueKey(uniqueKey, lang);
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 

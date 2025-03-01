@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Slf4j // 🔥 Buraya əlavə et
+
 public class AuthController {
 
     private final AuthService authService;
@@ -29,10 +32,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDto> register(@Valid @RequestBody RegisterRequestDto request) throws UserAlreadyExistsException {
         return ResponseEntity.ok(authService.register(request));
+
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        log.info("📝 Login request received for username: {}", loginRequest.getUsername());
+
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 

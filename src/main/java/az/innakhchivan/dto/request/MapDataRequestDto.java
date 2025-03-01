@@ -32,4 +32,6 @@ public class MapDataRequestDto {
     private String distanceFromBaku;
     private String generalInfo;
 
+
+
 }
