@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: my_postgres
+    container_name: postgres_version
     environment:
       POSTGRES_USER: pass
       POSTGRES_PASSWORD: 1212
@@ -13,9 +13,23 @@ services:
     networks:
       - my_network
 
+  app:
+    image: hafizbadirov/nakhchivan-api:latest
+    container_name: nakhchivan_api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/nakhdb
+      SPRING_DATASOURCE_USERNAME: pass
+      SPRING_DATASOURCE_PASSWORD: 1212
+    ports:
+      - "8081:8081"
+    networks:
+      - my_network
+
 volumes:
   postgres_data:
 
 networks:
   my_network:
-

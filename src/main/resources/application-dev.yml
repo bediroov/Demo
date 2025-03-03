@@ -1,13 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://*********/nakhdb
-    username: "******"
-    password: "*****"
-
-  jpa:
-    hibernate:
-      ddl-auto: update
+    url: jdbc:postgresql://62.84.181.155:5432/nakhdb
+    username: nakhinvest
+    password: nakhinvest24
 
     open-in-view: false #DB-ile is bitdikde session baglanir
     properties:
@@ -38,3 +34,9 @@ jwt:
   access-token-expiration: 900_000       # 15 dəqiqə
   refresh-token-expiration: 604_800_000 # 1 həftə
 
+image:
+  upload:
+    dir: images
+
+base:
+  url:  https://nakhinvest.az
