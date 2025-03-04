@@ -29,7 +29,7 @@ public class WhyNakhinvestController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<WhyNakhinvestResponseDto>> getAllWhyNakhinvest(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<WhyNakhinvestResponseDto> newsList = whyNakhinvestService.getAllNakhinvest(lang);
         return new ResponseEntity<>(newsList, HttpStatus.OK);

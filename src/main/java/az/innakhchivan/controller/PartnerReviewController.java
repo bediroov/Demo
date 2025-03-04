@@ -22,7 +22,7 @@ public class PartnerReviewController {
         return new ResponseEntity<>(partnerReviewResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<PartnerReviewResponseDto>> getPartnerReviews(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<PartnerReviewResponseDto> responseDtoList = partnerReviewService.getAllPartnerReviews(lang);
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);

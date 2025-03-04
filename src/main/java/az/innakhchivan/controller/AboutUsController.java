@@ -30,7 +30,7 @@ public class AboutUsController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<AboutResponseDto>> getAbout(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<AboutResponseDto> aboutResponseDto = aboutUsService.getAbout(lang);
         return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);

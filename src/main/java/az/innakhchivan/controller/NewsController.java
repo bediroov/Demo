@@ -27,7 +27,7 @@ public class NewsController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<NewsResponseDto>> getAllNews( @RequestParam(required = false, defaultValue = "az") String lang) {
 
         List<NewsResponseDto> newsList = newsService.getAllNews(lang);

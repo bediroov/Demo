@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://62.84.181.155:5432/nakhdb
-    username: nakhinvest
-    password: nakhinvest24
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
     open-in-view: false #DB-ile is bitdikde session baglanir
     properties:

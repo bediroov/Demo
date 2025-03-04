@@ -18,6 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 @Slf4j
@@ -34,11 +37,24 @@ public class SecurityConfig {
     private final CustomAccessDeniedFilter customAccessDeniedFilter;
 
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("https://nakhinvest.az");
+        configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply configuration to all paths
+        return source;
+    }
+
     private static final String[] WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             // ALl endpoint
-//            "/api/**"
+            "/api/**"
     };
 
     @Bean
@@ -46,35 +62,37 @@ public class SecurityConfig {
         log.info("Configuring SecurityFilterChain...");
 
         return http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf()
+                .and()
+                .cors().disable()
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(WHITELIST).permitAll()
 
-                        .requestMatchers("/api/v1/auth/register").permitAll()
-                        .requestMatchers("/api/v1/auth/login").permitAll()
-                        .requestMatchers("/api/v1/auth/logout").permitAll()
+//                        .requestMatchers("/api/v1/auth/register").permitAll()
+//                        .requestMatchers("/api/v1/auth/login").permitAll()
+//                        .requestMatchers("/api/v1/auth/logout").permitAll()
+//
+//                        .requestMatchers("/api/v1/auth/**").hasAnyRole("USER", "ADMIN")
+//
+//                        //Yeni elave etdim
+//                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole("ADMIN")  // PUT yalnız ADMIN
+//
+//                        .requestMatchers("/api/v1/about/all/**",
+//                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all/**",
+//                                "/api/v1/contact/all/**",
+//                                "/api/v1/incentive/all/**",
+//                                "/api/v1/news/all?**",
+//                                "/api/v1/partner-feedback/all/**",
+//                                "/api/v1/image/all/**",
+//                                "/api/v1/image/download-by-url/**",
+//                                "/api/v1/project/all/**",
+//                                "/api/v1/question/all/**",
+//                                "/api/v1/sector/all/**",
+//                                "/api/v1/video-gallery/all/**",
+//                                "/api/v1/why-nakhinvest/all/**",
+//                                "/api/v1/write-to-us/all/**").hasRole("USER")
 
-                        .requestMatchers("/api/v1/auth/**").hasAnyRole("USER", "ADMIN")
-
-                        //Yeni elave etdiklerim
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole("ADMIN")  // PUT yalnız ADMIN
-
-                        .requestMatchers("/api/v1/about/all/**",
-                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all/**",
-                                "/api/v1/contact/all/**",
-                                "/api/v1/incentive/all/**",
-                                "/api/v1/news/all?**",
-                                "/api/v1/partner-feedback/all/**",
-                                "/api/v1/image/all/**",
-                                "/api/v1/image/download-by-url/**",
-                                "/api/v1/project/all/**",
-                                "/api/v1/question/all/**",
-                                "/api/v1/sector/all/**",
-                                "/api/v1/video-gallery/all/**",
-                                "/api/v1/why-nakhinvest/all/**",
-                                "/api/v1/write-to-us/all/**").hasRole("USER")
-
-                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
+//                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e ->

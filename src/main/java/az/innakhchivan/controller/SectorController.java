@@ -24,7 +24,7 @@ public class SectorController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<SectorResponseDto>> getAllSectors(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<SectorResponseDto> newsList = sectorService.getAllSector(lang);
         return new ResponseEntity<>(newsList, HttpStatus.OK);
