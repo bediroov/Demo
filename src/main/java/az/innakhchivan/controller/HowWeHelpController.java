@@ -30,7 +30,7 @@ public class HowWeHelpController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<HowWeHelpResponseDto>> getAbout(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<HowWeHelpResponseDto> howWeHelpResponseDto = howWeHelpService.getHowWeHelp(lang);
         return new ResponseEntity<>(howWeHelpResponseDto, HttpStatus.OK);

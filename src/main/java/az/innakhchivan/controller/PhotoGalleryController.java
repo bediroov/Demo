@@ -22,7 +22,7 @@ public class PhotoGalleryController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<PhotoGalleryResponseDto>> getAllImages() {
         List<PhotoGalleryResponseDto> responseDto = photoGalleryService.getAllImages();
         return new ResponseEntity<>(responseDto, HttpStatus.OK);

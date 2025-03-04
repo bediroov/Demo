@@ -22,7 +22,7 @@ public class ContactController {
         return new ResponseEntity<>(contactResponseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<ContactResponseDto>> getAll() {
         List<ContactResponseDto> contactResponseDto = contactService.getContactsAll();
         return new ResponseEntity<>(contactResponseDto, HttpStatus.OK);

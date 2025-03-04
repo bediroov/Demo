@@ -25,7 +25,7 @@ public class BecomingAnEntrepreneurInNakhinvestController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<BecomingAnEntrepreneurInNakhinvestResponseDto>> getAllEntrepreneur(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<BecomingAnEntrepreneurInNakhinvestResponseDto> newsList = becomingAnEntrepreneurInNakhinvestService.getEntrepreneurAll(lang);
         return new ResponseEntity<>(newsList, HttpStatus.OK);

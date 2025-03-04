@@ -29,7 +29,7 @@ public class WhoAreWeController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<WhoAreWeResponseDto>> getAllWhoAreWe(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<WhoAreWeResponseDto> responseDtoList = whoAreWeService.getAllWhoAreWe(lang);
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);

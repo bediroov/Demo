@@ -34,7 +34,7 @@ public class RegionController {
         return new ResponseEntity<>(isActive, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<RegionResponseDto>> getAllRegions(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<RegionResponseDto> responseDtos = regionService.getAllRegions(lang);
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);

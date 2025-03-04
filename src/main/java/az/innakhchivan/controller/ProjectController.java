@@ -31,7 +31,7 @@ public class ProjectController {
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<ProjectResponseDto>> getAllProjects(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<ProjectResponseDto> projects = projectService.getAllProjects(lang);
         return new ResponseEntity<>(projects, HttpStatus.OK);

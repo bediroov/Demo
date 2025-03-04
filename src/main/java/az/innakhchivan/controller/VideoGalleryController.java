@@ -24,7 +24,7 @@ public class VideoGalleryController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<VideoGalleryResponseDto>> getAllVideos() {
         List<VideoGalleryResponseDto> videos = videoGalleryService.getAllVideos();
         return new ResponseEntity<>(videos, HttpStatus.OK);

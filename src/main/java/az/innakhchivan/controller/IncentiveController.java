@@ -30,7 +30,7 @@ public class IncentiveController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<IncentiveResponseDto>> getAllIncentive(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<IncentiveResponseDto> incentiveResponseDto = incentiveService.getIncentiveAll(lang);
         return new ResponseEntity<>(incentiveResponseDto, HttpStatus.OK);

@@ -22,7 +22,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryResponseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<CategoryResponseDto>> getAllCategories(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<CategoryResponseDto> responseDtoList = categoryService.getAllCategory(lang);
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);

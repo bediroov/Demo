@@ -72,7 +72,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/v1/auth/login").permitAll()
 //                        .requestMatchers("/api/v1/auth/logout").permitAll()
 //
-//                        .requestMatchers("/api/v1/auth/**").hasAnyRole("USER", "ADMIN")
+//                        .requestMatchers("/api/v1/auth/**").hasAnyRole(Role.ROLE_ADMIN.getAuthority(),Role.ROLE_USER.getAuthority())
 //
 //                        //Yeni elave etdim
 //                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole("ADMIN")  // PUT yalnız ADMIN

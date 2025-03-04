@@ -23,7 +23,7 @@ public class ReferenceController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<ReferenceResponseDto>> getAllReferences() {
         List<ReferenceResponseDto> responseDto = referenceService.getAllReferences();
         return new ResponseEntity<>(responseDto, HttpStatus.OK);

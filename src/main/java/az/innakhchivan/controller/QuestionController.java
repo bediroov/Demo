@@ -29,7 +29,7 @@ private final QuestionService questionService;
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<QuestionResponseDto>> getAllQuestion(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<QuestionResponseDto> questionResponseDto = questionService.getQuestionAll(lang);
         return new ResponseEntity<>(questionResponseDto, HttpStatus.OK);
