@@ -1,4 +1,5 @@
 package az.innakhchivan.config;
+
 import az.innakhchivan.enums.Role;
 import az.innakhchivan.exception.CustomAccessDeniedFilter;
 import az.innakhchivan.security.JwtAuthFilter;
@@ -22,7 +23,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 @Slf4j
 @Configuration
 @EnableWebSecurity
@@ -35,7 +35,6 @@ public class SecurityConfig {
     private final UserService userService;
     private final AuthenticationProvider authenticationProvider;
     private final CustomAccessDeniedFilter customAccessDeniedFilter;
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -53,7 +52,6 @@ public class SecurityConfig {
     private static final String[] WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            // ALl endpoint
             "/api/**"
     };
 
@@ -62,54 +60,57 @@ public class SecurityConfig {
         log.info("Configuring SecurityFilterChain...");
 
         return http
-                .csrf()
-                .and()
-                .cors().disable()
+                .csrf().disable() // Disable CSRF
+                .cors().disable() // Disable CORS
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(WHITELIST).permitAll()
 
-//                        .requestMatchers("/api/v1/auth/register").permitAll()
-//                        .requestMatchers("/api/v1/auth/login").permitAll()
-//                        .requestMatchers("/api/v1/auth/logout").permitAll()
-//
-//                        .requestMatchers("/api/v1/auth/**").hasAnyRole(Role.ROLE_ADMIN.getAuthority(),Role.ROLE_USER.getAuthority())
-//
-//                        //Yeni elave etdim
-//                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole("ADMIN")  // PUT yalnız ADMIN
-//
-//                        .requestMatchers("/api/v1/about/all/**",
-//                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all/**",
-//                                "/api/v1/contact/all/**",
-//                                "/api/v1/incentive/all/**",
-//                                "/api/v1/news/all?**",
-//                                "/api/v1/partner-feedback/all/**",
-//                                "/api/v1/image/all/**",
-//                                "/api/v1/image/download-by-url/**",
-//                                "/api/v1/project/all/**",
-//                                "/api/v1/question/all/**",
-//                                "/api/v1/sector/all/**",
-//                                "/api/v1/video-gallery/all/**",
-//                                "/api/v1/why-nakhinvest/all/**",
-//                                "/api/v1/write-to-us/all/**").hasRole("USER")
+                        .requestMatchers("/api/v1/auth/register").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/logout").permitAll()
 
-//                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
+                        // Use hasRole without 'ROLE_' prefix
+                        .requestMatchers("/api/v1/auth/**").hasAnyRole("USER", "ADMIN")
+
+                        // Use HttpMethod.PUT with hasRole for admin-only access
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole("ADMIN")
+
+                        // Restricting access to other API endpoints for USER and ADMIN roles
+                        .requestMatchers("/api/v1/about/all/**",
+                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all/**",
+                                "/api/v1/contact/all/**",
+                                "/api/v1/incentive/all/**",
+                                "/api/v1/news/all?**",
+                                "/api/v1/partner-feedback/all/**",
+                                "/api/v1/image/all/**",
+                                "/api/v1/image/download-by-url/**",
+                                "/api/v1/project/all/**",
+                                "/api/v1/question/all/**",
+                                "/api/v1/sector/all/**",
+                                "/api/v1/video-gallery/all/**",
+                                "/api/v1/why-nakhinvest/all/**",
+                                "/api/v1/write-to-us/all/**").hasAuthority("USER")
+
+                        // ADMIN-only access to the remaining endpoints
+                        .requestMatchers("/api/v1/**").hasAuthority("ADMIN")
+
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(e ->
-                        e.accessDeniedHandler(customAccessDeniedFilter)
-                )
+                .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedFilter))
                 .authenticationProvider(authenticationProvider)
                 .userDetailsService(userService)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout ->
-                        logout.logoutUrl("/api/auth/logout").addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication)
-                                        -> SecurityContextHolder.clearContext())
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
                 .build();
     }
+
+
+
+
+
 }
-
-

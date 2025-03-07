@@ -2,7 +2,7 @@ spring:
   application:
     name: in-nakhchivan-backend
   profiles:
-    active: dev
+    active: local
 
 logging:
   level:
