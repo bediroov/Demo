@@ -1,5 +1,4 @@
 package az.innakhchivan.controller;
-
 import az.innakhchivan.dto.request.BecomingAnEntrepreneurInNakhinvestRequestDto;
 import az.innakhchivan.dto.response.BecomingAnEntrepreneurInNakhinvestResponseDto;
 import az.innakhchivan.service.BecomingAnEntrepreneurInNakhinvestService;

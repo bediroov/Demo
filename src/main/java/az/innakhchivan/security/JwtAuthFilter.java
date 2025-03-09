@@ -1,5 +1,4 @@
 package az.innakhchivan.security;
-
 ;
 import az.innakhchivan.repository.TokenRepository;
 import az.innakhchivan.service.JwtService;
@@ -18,7 +17,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-
 import java.io.IOException;
 
 @Slf4j
@@ -36,6 +34,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
+        log.info("CSRF Token: " + request.getHeader("X-CSRF-TOKEN"));
+        log.info("CSRF Parameter: " + request.getParameter("_csrf"));
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

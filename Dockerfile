@@ -2,7 +2,7 @@
 FROM openjdk:21-jdk-slim
 
 # Tətbiqin JAR faylını konteynerə kopyalayın
-COPY build/libs/in-nakhchivan-backend-0.0.1-SNAPSHOT.jar in-nakhchivan-backend.jar
+COPY build/libs/in-nakhchivan-backend-1.0.1.jar in-nakhchivan-backend.jar
 
 # Portu açın (tətbiq burada işləyəcək)
 EXPOSE 8081

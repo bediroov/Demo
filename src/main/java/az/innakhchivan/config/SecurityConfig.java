@@ -1,6 +1,4 @@
 package az.innakhchivan.config;
-
-import az.innakhchivan.enums.Role;
 import az.innakhchivan.exception.CustomAccessDeniedFilter;
 import az.innakhchivan.security.JwtAuthFilter;
 import az.innakhchivan.service.UserService;
@@ -36,18 +34,18 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final CustomAccessDeniedFilter customAccessDeniedFilter;
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.addAllowedOriginPattern("https://nakhinvest.az");
-        configuration.addAllowedOrigin("http://localhost:5173");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Apply configuration to all paths
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowCredentials(true);
+//        configuration.addAllowedOriginPattern("https://nakhinvest.az");
+//        configuration.addAllowedOrigin("http://localhost:4200");
+//        configuration.addAllowedMethod("*");
+//        configuration.addAllowedHeader("*");
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration); // Apply configuration to all paths
+//        return source;
+//    }
 
     private static final String[] WHITELIST = {
             "/v3/api-docs/**",
@@ -55,13 +53,13 @@ public class SecurityConfig {
             "/api/**"
     };
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Configuring SecurityFilterChain...");
 
         return http
-                .csrf().disable() // Disable CSRF
-                .cors().disable() // Disable CORS
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(WHITELIST).permitAll()
 
@@ -108,9 +106,5 @@ public class SecurityConfig {
                 )
                 .build();
     }
-
-
-
-
 
 }

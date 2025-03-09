@@ -1,5 +1,4 @@
 package az.innakhchivan.controller;
-
 import az.innakhchivan.dto.request.LoginRequestDto;
 import az.innakhchivan.dto.request.RegisterRequestDto;
 import az.innakhchivan.dto.response.AuthResponseDto;
@@ -17,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @Validated
 @RestController

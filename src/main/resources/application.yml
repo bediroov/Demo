@@ -2,7 +2,10 @@ spring:
   application:
     name: in-nakhchivan-backend
   profiles:
-    active: local
+    active: dev
+  banner:
+    location: classpath:banner.txt
+
 
 logging:
   level:
