@@ -72,4 +72,21 @@ public class AboutUsService {
 
         aboutUsRepository.delete(about);
     }
+
+    public List<AboutUs> getAllAbout() {
+        return aboutUsRepository.findAllByOrderByIdAsc().stream()
+                .map(aboutUs -> new AboutUs(
+                        aboutUs.getId(),
+                        aboutUs.getAzTitle(),
+                        aboutUs.getAzDescription(),
+                        aboutUs.getEnTitle(),
+                        aboutUs.getEnDescription(),
+                        aboutUs.getRuTitle(),
+                        aboutUs.getRuDescription(),
+                        aboutUs.getImageUrl()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 }

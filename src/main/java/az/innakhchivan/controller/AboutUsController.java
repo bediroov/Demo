@@ -1,6 +1,7 @@
 package az.innakhchivan.controller;
 import az.innakhchivan.dto.request.AboutRequestDto;
 import az.innakhchivan.dto.response.AboutResponseDto;
+import az.innakhchivan.entity.AboutUs;
 import az.innakhchivan.service.AboutUsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class AboutUsController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+
     @PutMapping("/{Id}")
     public ResponseEntity<String> updateAbout(@PathVariable Long Id,
                                                         @RequestBody AboutRequestDto aboutRequestDto) {
@@ -39,6 +41,12 @@ public class AboutUsController {
     public ResponseEntity<Void> deleted(@PathVariable Long Id) {
         aboutUsService.deletedAbout(Id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<AboutUs>> getAllAbout() {
+        List<AboutUs> aboutResponseDto = aboutUsService.getAllAbout();
+        return new ResponseEntity<>(aboutResponseDto, HttpStatus.OK);
     }
 
 }

@@ -26,4 +26,6 @@ public class CategoryController {
         List<CategoryResponseDto> responseDtoList = categoryService.getAllCategory(lang);
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
+
+
 }

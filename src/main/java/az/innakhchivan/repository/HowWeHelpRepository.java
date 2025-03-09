@@ -2,6 +2,10 @@ package az.innakhchivan.repository;
 
 import az.innakhchivan.entity.HowWeHelp;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface HowWeHelpRepository extends JpaRepository<HowWeHelp, Long> {
+import java.util.List;
+
+public interface HowWeHelpRepository extends JpaRepository<HowWeHelp, Long>, JpaSpecificationExecutor<HowWeHelp> {
+    List<HowWeHelp> findAllByOrderByIdAsc();
 }

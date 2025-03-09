@@ -36,10 +36,14 @@ public class BecomingAnEntrepreneurInNakhinvestController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEntrepreneur(@PathVariable Long id) {
         becomingAnEntrepreneurInNakhinvestService.deletedEntrepreneur(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 }
