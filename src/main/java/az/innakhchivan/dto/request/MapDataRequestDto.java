@@ -25,4 +25,12 @@ public class MapDataRequestDto {
     private Integer population;
     private String iconUrl;
 
+
+    // Yeni əlavə edilən sahələr
+    private Integer settlementCount;
+    private Integer villageCount;
+    private Integer cityAdminArea;
+    private String distanceFromBaku;
+    private String generalInfo;
+
 }

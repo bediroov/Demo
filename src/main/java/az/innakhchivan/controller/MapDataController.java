@@ -6,6 +6,7 @@ import az.innakhchivan.dto.response.MapDataResponseDto;
 import az.innakhchivan.entity.MapData;
 import az.innakhchivan.service.MapDataService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/map-data")
 @RequiredArgsConstructor
+@Slf4j
 public class MapDataController {
     private final MapDataService mapDataService;
 
     @PostMapping
     public ResponseEntity<Void> createdMapData(@RequestBody MapDataRequestDto requestDto) {
          mapDataService.createMapData(requestDto);
+        log.info("🔐 controler filter chain initializing...");
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
