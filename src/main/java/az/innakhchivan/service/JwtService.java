@@ -81,6 +81,8 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserEntity user) {
+
+
         Map<String, Object> extraClaims = new HashMap<>();
         List<String> roles = user.getAuthorities().stream().map(Enum::name).toList();
         extraClaims.put("roles", roles);

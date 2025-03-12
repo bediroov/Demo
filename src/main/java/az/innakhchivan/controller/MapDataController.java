@@ -1,16 +1,13 @@
 package az.innakhchivan.controller;
-
 import az.innakhchivan.dto.request.MapDataRequestDto;
 import az.innakhchivan.dto.response.MapDataResponse;
 import az.innakhchivan.dto.response.MapDataResponseDto;
-import az.innakhchivan.entity.MapData;
 import az.innakhchivan.service.MapDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -40,6 +37,7 @@ public class MapDataController {
         MapDataResponseDto mapData = mapDataService.getMapDataById(id, lang);
         return new ResponseEntity<>(mapData, HttpStatus.OK);
     }
+
 
     @GetMapping
     public ResponseEntity<List<MapDataResponseDto>> getAllMapData(@RequestParam(required = false, defaultValue = "az") String lang) {
