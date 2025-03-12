@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/contact", "/api/v1/submit-project", "/api/v1/pdf/upload").permitAll()
+
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/search",
                                 "/api/v1/why-nakhinvest",
