@@ -4,6 +4,7 @@ import az.innakhchivan.exception.CustomAccessDeniedFilter;
 import az.innakhchivan.security.JwtAuthFilter;
 import az.innakhchivan.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,11 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -31,22 +32,32 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final CustomAccessDeniedFilter customAccessDeniedFilter;
 
-
-    private static final String[] AUTH_WHITELIST = {
+    private static final String[] WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
-
+            "/api/**"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        log.info("Configuring SecurityFilterChain...");
+
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/contact", "/api/v1/submit-project", "/api/v1/pdf/upload").permitAll()
+                        .requestMatchers(WHITELIST).permitAll()
 
+                        // Auth üçün açıq endpointlər
+                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
+
+                        // POST sorğuları (Hər kəs üçün açıqdır)
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/contact",
+                                "/api/v1/submit-project",
+                                "/api/v1/pdf/upload"
+                        ).permitAll()
+
+                        // USER icazəli endpointlər (GET)
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/search",
                                 "/api/v1/why-nakhinvest",
@@ -72,8 +83,10 @@ public class SecurityConfig {
                                 "/api/v1/how-we-help",
                                 "/api/v1/category",
                                 "/api/v1/becoming-an-entrepreneur-in-nakhinvest",
-                                "/api/v1/about").permitAll()
-                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
+                                "/api/v1/about"
+                        ).permitAll()
+
+                        // USER-lər üçün əlavə GET icazələr
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/who-are-we/all",
                                 "/api/v1/why-nakhinvest/all",
@@ -84,27 +97,33 @@ public class SecurityConfig {
                                 "/api/v1/partner-review/all",
                                 "/api/v1/news/all",
                                 "/api/v1/map-data/all",
+                                "/api/v1/map-data/region/*",
                                 "/api/v1/contact/all",
                                 "/api/v1/incentive/all",
                                 "/api/v1/how-we-help/all",
                                 "/api/v1/category/all",
                                 "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all",
                                 "/api/v1/about/all",
-                                "/api/v1/submit-project/all").hasRole("USER")
+                                "/api/v1/submit-project/all"
+                        ).hasAuthority("USER")
+
+                        // USER və ADMIN hər ikisi üçün icazələr
+                        .requestMatchers("/api/v1/auth/**").hasAnyRole("USER", "ADMIN")
+
+                        // ADMIN-only icazələr (bütün /api/v1/** endpointləri)
+                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(e ->
-                        e.accessDeniedHandler(customAccessDeniedFilter)
-                )
+                .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedFilter))
                 .authenticationProvider(authenticationProvider)
                 .userDetailsService(userService)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout ->
-                        logout.logoutUrl("/api/auth/logout").addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication)
-                                        -> SecurityContextHolder.clearContext())
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
                 .build();
     }

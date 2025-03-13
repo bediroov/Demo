@@ -10,6 +10,7 @@ import az.innakhchivan.exception.MapDataNotFoundException;
 import az.innakhchivan.exception.RegionNotFoundException;
 import az.innakhchivan.repository.MapDataRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +18,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MapDataService {
     private final MapDataRepository mapDataRepository;
     private final RegionService regionService;
 
 
     public void createMapData(MapDataRequestDto mapDataRequestDto) {
+        log.info("Create Request Data: {}", mapDataRequestDto); // ✅ Gələn JSON-u yoxla
+
         MapData mapData = new MapData();
 
         mapData.setLocation(mapDataRequestDto.getLocation());
