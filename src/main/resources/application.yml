@@ -6,4 +6,7 @@ spring:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    root: INFO
+    az.innakhchivan: INFO
+    org.springframework.security: INFO
+

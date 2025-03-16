@@ -38,7 +38,6 @@ public class MapDataController {
         return new ResponseEntity<>(mapData, HttpStatus.OK);
     }
 
-
     @GetMapping
     public ResponseEntity<List<MapDataResponseDto>> getAllMapData(@RequestParam(required = false, defaultValue = "az") String lang) {
         List<MapDataResponseDto> mapDataResponseDto = mapDataService.getAllMapData(lang);
@@ -46,8 +45,8 @@ public class MapDataController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<MapDataResponse>> getAll() {
-        List<MapDataResponse> mapDataResponse = mapDataService.getAllMap();
+    public ResponseEntity<?> getAll(@RequestParam(name = "lang",required = false) String lang) {
+        var mapDataResponse = mapDataService.getAllMap(lang);
         return new ResponseEntity<>(mapDataResponse, HttpStatus.OK);
     }
 

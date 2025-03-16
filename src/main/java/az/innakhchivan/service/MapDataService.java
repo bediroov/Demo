@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,8 +52,9 @@ public class MapDataService {
         mapData.setVillageCount(mapDataRequestDto.getVillageCount());
         mapData.setCityAdminArea(mapDataRequestDto.getCityAdminArea());
         mapData.setDistanceFromBaku(mapDataRequestDto.getDistanceFromBaku());
-        mapData.setGeneralInfo(mapDataRequestDto.getGeneralInfo());
-
+        mapData.setAzGeneralInfo(mapDataRequestDto.getAzGeneralInfo());
+        mapData.setEnGeneralInfo(mapDataRequestDto.getEnGeneralInfo());
+        mapData.setRuGeneralInfo(mapDataRequestDto.getRuGeneralInfo());
         mapData.setRegion(regionService.getRegionByUniqueKey(mapDataRequestDto.getRegionUniqueKey()));
 
         mapDataRepository.save(mapData);
@@ -84,9 +86,9 @@ public class MapDataService {
         mapData.setVillageCount(mapDataRequestDto.getVillageCount());
         mapData.setCityAdminArea(mapDataRequestDto.getCityAdminArea());
         mapData.setDistanceFromBaku(mapDataRequestDto.getDistanceFromBaku());
-        mapData.setGeneralInfo(mapDataRequestDto.getGeneralInfo());
-
-
+        mapData.setEnGeneralInfo(mapDataRequestDto.getAzGeneralInfo());
+        mapData.setAzGeneralInfo(mapDataRequestDto.getAzGeneralInfo());
+        mapData.setRuGeneralInfo(mapDataRequestDto.getRuGeneralInfo());
         mapData.setRegion(regionService.getRegionByUniqueKey(mapDataRequestDto.getRegionUniqueKey()));
 
 
@@ -114,7 +116,7 @@ public class MapDataService {
                 .villageCount(mapData.getVillageCount())
                 .cityAdminArea(mapData.getCityAdminArea())
                 .distanceFromBaku(mapData.getDistanceFromBaku())
-                .generalInfo(mapData.getGeneralInfo())
+                .generalInfo(mapData.getMapDatageneralInfo(lang)) // ✅ Yeni methoddan istifadə etdik
                 .build();
 
     }
@@ -136,33 +138,131 @@ public class MapDataService {
                         mapData.getVillageCount(),
                         mapData.getCityAdminArea(),
                         mapData.getDistanceFromBaku(),
-                        mapData.getGeneralInfo()
+                        mapData.getMapDatageneralInfo(lang) // ✅ GeneralInfo dilə uyğun qaytarırıq
                 ))
                 .collect(Collectors.toList());
     }
 
 
-    public List<MapDataResponse> getAllMap() {
-        return mapDataRepository.findAllWithRegion().stream()
-                .map(mapData -> new MapDataResponse(
-                        mapData.getId(),
-                        mapData.getAzTitle(),
-                        mapData.getAzDescription(),
-                        mapData.getEnTitle(),
-                        mapData.getEnDescription(),
-                        mapData.getRuTitle(),
-                        mapData.getRuDescription(),
-                        mapData.getLocation(),
-                        mapData.getArea(),
-                        mapData.getAverageSalary(),
-                        mapData.getPopulation(),
-                        mapData.getIconUrl(),
-                        new RegionResponseDtoForRelation(
+    public Object getAllMap(String lang) {
+        List<MapData> mapDataList = mapDataRepository.findAllWithRegion();
+
+        if (lang == null) {
+            return mapDataList.stream()
+                    .map(mapData -> new MapDataResponse(
+                            mapData.getId(),
+                            mapData.getAzTitle(),
+                            mapData.getAzDescription(),
+                            mapData.getEnTitle(),
+                            mapData.getEnDescription(),
+                            mapData.getRuTitle(),
+                            mapData.getRuDescription(),
+                            mapData.getLocation(),
+                            mapData.getArea(),
+                            mapData.getAverageSalary(),
+                            mapData.getPopulation(),
+                            mapData.getIconUrl(),
+                            new RegionResponseDtoForRelation(
+                                    mapData.getRegion().getId(),
+                                    mapData.getRegion().getUniqueKey()
+                            ),
+                            // 🆕 Yeni sahələr əlavə olunur
+                            mapData.getSettlementCount(),
+                            mapData.getVillageCount(),
+                            mapData.getCityAdminArea(),
+                            mapData.getDistanceFromBaku(),
+                            mapData.getAzGeneralInfo(),
+                            mapData.getEnGeneralInfo(),
+                            mapData.getRuGeneralInfo()
+
+                    ))
+                    .collect(Collectors.toList());
+        }
+
+        HashMap<String, Object> responseMapData = new HashMap<>();
+
+        if ("en".equals(lang)) {
+             mapDataList.stream().map((mapData) -> {
+                         responseMapData.put("id", mapData.getId());
+                         responseMapData.put("title", mapData.getEnTitle());
+                         responseMapData.put("description", mapData.getEnDescription());
+                         responseMapData.put("location", mapData.getLocation());
+                         responseMapData.put("area", mapData.getArea());
+                         responseMapData.put("averageSalary", mapData.getAverageSalary());
+                         responseMapData.put("population", mapData.getPopulation());
+                         responseMapData.put("iconUrl", mapData.getIconUrl());
+                         responseMapData.put("region", new RegionResponseDtoForRelation(
+                                 mapData.getRegion().getId(),
+                                 mapData.getRegion().getUniqueKey()
+                         ));
+                         responseMapData.put("settlementCount", mapData.getSettlementCount());
+                         responseMapData.put("villageCount", mapData.getVillageCount());
+                         responseMapData.put("cityAdminArea", mapData.getCityAdminArea());
+                         responseMapData.put("distanceFromBaku", mapData.getDistanceFromBaku());
+                         responseMapData.put("generalInfo", mapData.getEnGeneralInfo());
+                        return responseMapData;
+             }
+
+                    ).collect(Collectors.toList());
+
+        }
+
+        if ("az".equals(lang)) {
+            mapDataList.stream().map((mapData) -> {
+                        responseMapData.put("id", mapData.getId());
+                        responseMapData.put("title", mapData.getAzTitle());
+                        responseMapData.put("description", mapData.getAzDescription());
+                        responseMapData.put("location", mapData.getLocation());
+                        responseMapData.put("area", mapData.getArea());
+                        responseMapData.put("averageSalary", mapData.getAverageSalary());
+                        responseMapData.put("population", mapData.getPopulation());
+                        responseMapData.put("iconUrl", mapData.getIconUrl());
+                        responseMapData.put("region", new RegionResponseDtoForRelation(
                                 mapData.getRegion().getId(),
                                 mapData.getRegion().getUniqueKey()
-                        )
-                ))
-                .collect(Collectors.toList());
+                        ));
+                        responseMapData.put("settlementCount", mapData.getSettlementCount());
+                        responseMapData.put("villageCount", mapData.getVillageCount());
+                        responseMapData.put("cityAdminArea", mapData.getCityAdminArea());
+                        responseMapData.put("distanceFromBaku", mapData.getDistanceFromBaku());
+                        responseMapData.put("generalInfo", mapData.getAzGeneralInfo());
+                        return responseMapData;
+                    }
+
+            ).collect(Collectors.toList());
+
+        }
+
+        if ("ru".equals(lang)) {
+            mapDataList.stream().map((mapData) -> {
+                        responseMapData.put("id", mapData.getId());
+                        responseMapData.put("title", mapData.getRuTitle());
+                        responseMapData.put("description", mapData.getRuDescription());
+                        responseMapData.put("location", mapData.getLocation());
+                        responseMapData.put("area", mapData.getArea());
+                        responseMapData.put("averageSalary", mapData.getAverageSalary());
+                        responseMapData.put("population", mapData.getPopulation());
+                        responseMapData.put("iconUrl", mapData.getIconUrl());
+                        responseMapData.put("region", new RegionResponseDtoForRelation(
+                                mapData.getRegion().getId(),
+                                mapData.getRegion().getUniqueKey()
+                        ));
+                        responseMapData.put("settlementCount", mapData.getSettlementCount());
+                        responseMapData.put("villageCount", mapData.getVillageCount());
+                        responseMapData.put("cityAdminArea", mapData.getCityAdminArea());
+                        responseMapData.put("distanceFromBaku", mapData.getDistanceFromBaku());
+                        responseMapData.put("generalInfo", mapData.getRuGeneralInfo());
+                        return responseMapData;
+                    }
+
+            ).collect(Collectors.toList());
+
+        }
+
+
+        responseMapData.put("message","Incorrect Language");
+        return responseMapData;
+
     }
 
 
@@ -188,8 +288,10 @@ public class MapDataService {
                         mapData.getVillageCount(),
                         mapData.getCityAdminArea(),
                         mapData.getDistanceFromBaku(),
-                        mapData.getGeneralInfo()
+                        mapData.getMapDatageneralInfo(lang)
                 ))
+
+
                 .collect(Collectors.toList());
     }
 

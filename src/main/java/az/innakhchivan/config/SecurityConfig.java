@@ -1,5 +1,4 @@
 package az.innakhchivan.config;
-
 import az.innakhchivan.exception.CustomAccessDeniedFilter;
 import az.innakhchivan.security.JwtAuthFilter;
 import az.innakhchivan.service.UserService;
@@ -18,12 +17,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-@Slf4j
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -32,11 +34,27 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final CustomAccessDeniedFilter customAccessDeniedFilter;
 
+
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowCredentials(true);
+//        configuration.addAllowedOriginPattern("https://nakhinvest.az");
+//        configuration.addAllowedOrigin("http://localhost:4200");
+//        configuration.addAllowedMethod("*");
+//        configuration.addAllowedHeader("*");
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration); // Apply configuration to all paths
+//        return source;
+//    }
+
+
     private static final String[] WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/api/**"
     };
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,71 +65,31 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(WHITELIST).permitAll()
 
-                        // Auth üçün açıq endpointlər
-                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
+                        .requestMatchers("/api/v1/auth/register").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/logout").permitAll()
 
-                        // POST sorğuları (Hər kəs üçün açıqdır)
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/v1/contact",
-                                "/api/v1/submit-project",
-                                "/api/v1/pdf/upload"
-                        ).permitAll()
-
-                        // USER icazəli endpointlər (GET)
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/v1/search",
-                                "/api/v1/why-nakhinvest",
-                                "/api/v1/why-nakhinvest/*",
-                                "/api/v1/who-are-we",
-                                "/api/v1/who-are-we/*",
-                                "/api/v1/video-gallery/**",
-                                "/api/v1/sector",
-                                "/api/v1/region",
-                                "/api/v1/region/*",
-                                "/api/v1/reference/*",
-                                "/api/v1/question",
-                                "/api/v1/project",
-                                "/api/v1/partner-review",
-                                "/api/v1/partner-review/*",
-                                "/api/v1/news",
-                                "/api/v1/map-data",
-                                "/api/v1/map-data/*",
-                                "/api/v1/map-data/region/*",
-                                "/api/v1/incentive",
-                                "/api/v1/image/*",
-                                "/api/v1/image/all",
-                                "/api/v1/how-we-help",
-                                "/api/v1/category",
-                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest",
-                                "/api/v1/about"
-                        ).permitAll()
-
-                        // USER-lər üçün əlavə GET icazələr
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/v1/who-are-we/all",
-                                "/api/v1/why-nakhinvest/all",
-                                "/api/v1/sector/all",
-                                "/api/v1/region/all",
-                                "/api/v1/question/all",
-                                "/api/v1/project/all",
-                                "/api/v1/partner-review/all",
-                                "/api/v1/news/all",
-                                "/api/v1/map-data/all",
-                                "/api/v1/map-data/region/*",
-                                "/api/v1/contact/all",
-                                "/api/v1/incentive/all",
-                                "/api/v1/how-we-help/all",
-                                "/api/v1/category/all",
-                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all",
-                                "/api/v1/about/all",
-                                "/api/v1/submit-project/all"
-                        ).hasAuthority("USER")
-
-                        // USER və ADMIN hər ikisi üçün icazələr
+                        // Use hasRole without 'ROLE_' prefix
                         .requestMatchers("/api/v1/auth/**").hasAnyRole("USER", "ADMIN")
 
-                        // ADMIN-only icazələr (bütün /api/v1/** endpointləri)
-                        .requestMatchers("/api/v1/**").hasRole("ADMIN")
+                        // Restricting access to other API endpoints for USER and ADMIN roles
+                        .requestMatchers("/api/v1/about/all/**",
+                                "/api/v1/becoming-an-entrepreneur-in-nakhinvest/all/**",
+                                "/api/v1/contact/all/**",
+                                "/api/v1/incentive/all/**",
+                                "/api/v1/news/all?**",
+                                "/api/v1/partner-feedback/all/**",
+                                "/api/v1/image/all/**",
+                                "/api/v1/image/download-by-url/**",
+                                "/api/v1/project/all/**",
+                                "/api/v1/question/all/**",
+                                "/api/v1/sector/all/**",
+                                "/api/v1/video-gallery/all/**",
+                                "/api/v1/why-nakhinvest/all/**",
+                                "/api/v1/write-to-us/all/**").hasAuthority("USER")
+
+                        // ADMIN-only access to the remaining endpoints
+                        .requestMatchers("/api/v1/**").hasAuthority("ADMIN")
 
                         .anyRequest().authenticated()
                 )
@@ -127,4 +105,5 @@ public class SecurityConfig {
                 )
                 .build();
     }
+
 }

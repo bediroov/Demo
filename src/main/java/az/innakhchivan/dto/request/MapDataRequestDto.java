@@ -31,6 +31,8 @@ public class MapDataRequestDto {
     private Integer villageCount;
     private Integer cityAdminArea;
     private String distanceFromBaku;
-    private String generalInfo;
+    private String azGeneralInfo;
+    private String enGeneralInfo;
+    private String ruGeneralInfo;
 
 }

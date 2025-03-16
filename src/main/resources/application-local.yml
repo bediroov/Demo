@@ -1,10 +1,13 @@
 spring:
   datasource:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/nakhdb
+#    username: pass
+#    password: 1212
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/nakhdb
-    username: pass
-    password: 1212
-
+    url: jdbc:postgresql://62.84.181.155:5432/nakhdb
+    username: nakhinvest
+    password: nakhinvest24
   jpa:
     hibernate:
       ddl-auto: update

@@ -7,16 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "map_data")
 public class MapData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
 
     private String azTitle;
     private String azDescription;
@@ -47,16 +49,25 @@ public class MapData {
     @Column(name = "distance_from_baku")
     private String distanceFromBaku;
 
-    @Column(name = "general_info", columnDefinition = "TEXT")
-    private String generalInfo;
-
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", nullable = false)
     private Region region;
 
+    private String azGeneralInfo;
+    private String enGeneralInfo;
+    private String ruGeneralInfo;
 
+    public String getMapDatageneralInfo(String lang) {
+        return switch (lang) {
+            case "en" -> enGeneralInfo;
+            case "ru" -> ruGeneralInfo;
+            default -> azGeneralInfo;
+        };
+    }
+//
+//
     public String getMapDataDescription(String lang) {
         return switch (lang) {
             case "en" -> enDescription;
